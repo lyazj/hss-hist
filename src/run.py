@@ -61,9 +61,9 @@ def run(config):
             else:
                 bg_names.append(name); bg_counts.append(count)
         plt.clf()
-        hep.cms.label(year=config['year'], lumi=config['luminosity'])
+        hep.cms.label(data=not config['mc'], label='Preliminary', year=config['year'], lumi=config['luminosity'])
         if hist['stack-background']:
-            hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill', sort='yield')
+            hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill')
         else:
             hep.histplot(bg_counts, bins, label=bg_names)
         hep.histplot(sg_counts, bins, label=sg_names)
