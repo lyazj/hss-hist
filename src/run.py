@@ -61,7 +61,12 @@ def run(config):
             else:
                 bg_names.append(name); bg_counts.append(count)
         plt.clf()
-        hep.cms.label(data=not config['mc'], label='Preliminary', year=config['year'], lumi=config['luminosity'])
+        try:
+            hep.cms.label(data=not config['mc'], paper=not hist['preliminary'], supplementary=hist['supplementary'],
+                          year=config['year'], lumi=config['luminosity'])
+        except Exception:
+            label = 'Preliminary' if hist['preliminary'] else 'Supplementary' if hist['supplementary'] else ''
+            hep.cms.label(data=not config['mc'], label=label, year=config['year'], lumi=config['luminosity'])
         if hist['stack-background']:
             hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill')
         else:

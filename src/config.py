@@ -51,6 +51,8 @@ class Config(dict):
 
         # Complete histogram attributes.
         for hist in self['hists']:
+            hist['preliminary'] = hist.get('preliminary', True)
+            hist['supplementary'] = hist.get('supplementary', False)
             hist['threshold'] = hist.get('threshold')
             hist['xlabel'] = hist.get('xlabel', hist['name'])
             hist['ylabel'] = hist.get('ylabel', 'number')
