@@ -51,10 +51,15 @@ class Config(dict):
 
         # Complete histogram attributes.
         for hist in self['hists']:
+            hist['threshold'] = hist.get('threshold')
+            hist['xlabel'] = hist.get('xlabel', hist['name'])
+            hist['ylabel'] = hist.get('ylabel', 'number')
             hist['xscale'] = hist.get('xscale', 'linear')
             hist['yscale'] = hist.get('yscale', 'linear')
+            hist['grid'] = hist.get('grid')
+            hist['legend-options'] = hist.get('legend-options', {})
             hist['stack-background'] = hist.get('stack-background', False)
-            hist['format'] = hist.get('format', 'pdf')
+            hist['format'] = hist.get('format', 'pdf').split(',')
 
         # List active branches on demand.
         if 'active-branches' not in self:
@@ -64,6 +69,10 @@ class Config(dict):
                 for branch in re_identifier.findall(hist['expr']):
                     active_branches.add(branch)
             self['active-branches'] = sorted(active_branches)
+
+        # Global configuration.
+        self['figsize'] = self.get('figsize', (12, 9))
+        self['dpi'] = self.get('dpi', 150)
 
 if __name__ == '__main__':
 

@@ -1,13 +1,16 @@
+import mplhep as hep
 import numpy as np
 import uproot
 import matplotlib.pyplot as plt
 
-SIGNAL_COLORS = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black', 'white']
+plt.style.use(hep.style.CMS)
 
 def run(config):
 
-    # An expression produces values to fill a histogram.
     if not config['hists']: return
+    plt.figure(figsize=config['figsize'], dpi=config['dpi'])
+
+    # An expression produces values to fill a histogram.
     expressions = [hist['expr'] for hist in config['hists']]
     hists_all_categories = [[] for hist in config['hists']]
 
@@ -15,7 +18,7 @@ def run(config):
     for category in config['categories']:
         hists = [list(np.histogram([], bins=hist['nbin'], range=(hist['lb'], hist['ub']), weights=[]))
                  for hist in config['hists']]  # 0: counts, 1: bins
-        thresholds = [hist['threshold'] for hist in config['hists'][:2]] + [0.0]
+        thresholds = [hist['threshold'] for hist in config['hists']]
         name = category['name']
         xs = 0.0
         nevent = 0
@@ -36,9 +39,9 @@ def run(config):
 
             # Fill histograms. Use zero weights as masks.
             weight = np.ones_like(values[0]) * weight
-            for figid, (hist, value, threshold) in enumerate(zip(hists, values, thresholds), 1):
+            for hist, value, threshold in zip(hists, values, thresholds):
                 hist[0] += np.histogram(value, bins=hist[1], weights=weight)[0]
-                weight *= value >= threshold
+                if threshold is not None: weight *= value >= threshold
 
         # Store histograms.
         for hist_all_categories, hist in zip(hists_all_categories, hists):
@@ -58,20 +61,26 @@ def run(config):
             else:
                 bg_names.append(name); bg_counts.append(count)
         plt.clf()
+        hep.cms.label(year=config['year'], lumi=config['luminosity'])
         if hist['stack-background']:
-            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='barstacked', alpha=0.5)
-            plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step', color=SIGNAL_COLORS[:len(sg_counts)])
+            hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill', sort='yield')
         else:
-            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='step')
-            plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step')
-        plt.xlabel(hist['name'])
-        plt.ylabel('number')
+            hep.histplot(bg_counts, bins, label=bg_names)
+        hep.histplot(sg_counts, bins, label=sg_names)
+        plt.xlabel(hist['xlabel'])
+        plt.ylabel(hist['ylabel'])
         plt.xscale(hist['xscale'])
         plt.yscale(hist['yscale'])
-        plt.grid(axis='y')
-        plt.legend()
+        if hist['grid']: plt.grid(axis=hist['grid'])
+        plt.legend(**hist['legend-options'])
         plt.tight_layout()
-        plt.savefig('%s-%s-%s-%s.%s' % (hist['name'], hist['xscale'], hist['yscale'], 'stacked' if hist['stack-background'] else 'step', hist['format']))
+        for extension in hist['format']:
+            plt.savefig('%s-%s-%s-%s.%s' % (
+                hist['name'], hist['xscale'], hist['yscale'],
+                'stack' if hist['stack-background'] else 'step', extension
+            ))
+
+    plt.close()
 
 if __name__ == '__main__':
 

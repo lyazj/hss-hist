@@ -16,6 +16,7 @@ hists:
     ub: 1.0
     threshold: 0.0
     yscale: log
+    grid: y
 
   - name: kinBDT
     expr: kinBDT
@@ -24,15 +25,18 @@ hists:
     ub: 1.0
     threshold: 0.0
     yscale: log
-    #stack-background: true
+    grid: y
+    stack-background: true
 
   - name: mass
     expr: ak15_regressed_mass
     nbin: 50
     lb: 0.0
     ub: 200.0
+    xlabel: 'Mass [GeV]'
     yscale: log
-    #stack-background: true
+    grid: y
+    stack-background: true
 
 categories:
 
