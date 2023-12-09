@@ -24,12 +24,15 @@ hists:
     ub: 1.0
     threshold: 0.0
     yscale: log
+    #stack-background: true
 
   - name: mass
     expr: ak15_regressed_mass
     nbin: 50
-    lb: 70.0
-    ub: 110.0
+    lb: 0.0
+    ub: 200.0
+    yscale: log
+    #stack-background: true
 
 categories:
 

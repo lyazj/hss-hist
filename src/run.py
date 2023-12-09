@@ -2,6 +2,8 @@ import numpy as np
 import uproot
 import matplotlib.pyplot as plt
 
+SIGNAL_COLORS = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black', 'white']
+
 def run(config):
 
     # An expression produces values to fill a histogram.
@@ -57,10 +59,11 @@ def run(config):
                 bg_names.append(name); bg_counts.append(count)
         plt.clf()
         if hist['stack-background']:
-            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='barstacked')
+            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='barstacked', alpha=0.5)
+            plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step', color=SIGNAL_COLORS[:len(sg_counts)])
         else:
-            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='stepfilled', alpha=0.5)
-        plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step')
+            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='step')
+            plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step')
         plt.xlabel(hist['name'])
         plt.ylabel('number')
         plt.xscale(hist['xscale'])
