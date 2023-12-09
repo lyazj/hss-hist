@@ -73,7 +73,7 @@ def run(config):
             label = 'Preliminary' if hist['preliminary'] else 'Supplementary' if hist['supplementary'] else ''
             hep.cms.label(data=not config['mc'], label=label, year=config['year'], lumi=config['luminosity'])
         if hist['stack-background']:
-            hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill')
+            hep.histplot(bg_counts, bins, label=bg_names, stack=True, histtype='fill', edgecolor='black', linewidth=0.5)
         else:
             hep.histplot(bg_counts, bins, label=bg_names)
         hep.histplot(sg_counts, bins, label=sg_names)
