@@ -51,8 +51,10 @@ class Config(dict):
 
         # Complete histogram attributes.
         for hist in self['hists']:
-            hist['xscale'] = hist.get('xscale', None) or 'linear'
-            hist['yscale'] = hist.get('yscale', None) or 'linear'
+            hist['xscale'] = hist.get('xscale', 'linear')
+            hist['yscale'] = hist.get('yscale', 'linear')
+            hist['stack-background'] = hist.get('stack-background', False)
+            hist['format'] = hist.get('format', 'pdf')
 
         # List active branches on demand.
         if 'active-branches' not in self:

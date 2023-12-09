@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 def run(config):
 
     # An expression produces values to fill a histogram.
+    if not config['hists']: return
     expressions = [hist['expr'] for hist in config['hists']]
+    hists_all_categories = [[] for hist in config['hists']]
 
     # Draw a group of histograms for each category.
     for category in config['categories']:
@@ -36,15 +38,29 @@ def run(config):
                 hist[0] += np.histogram(value, bins=hist[1], weights=weight)[0]
                 weight *= value >= threshold
 
-        # Draw histograms.
-        for figid, hist in enumerate(hists, 1):
-            plt.figure(figid)
-            plt.hist(hist[1][:-1], hist[1], weights=hist[0], label=name, histtype='step')
+        # Store histograms.
+        for hist_all_categories, hist in zip(hists_all_categories, hists):
+            hist_all_categories.append((name, hist))
         print('Summary for %s: %d/%d events scaled to %f pb' % (name, nevent_now, nevent, xs))
 
-    # Export histograms.
-    for figid, hist in enumerate(config['hists'], 1):
-        plt.figure(figid)
+    # Draw and export histograms.
+    for hist, hist_all_categories in zip(config['hists'], hists_all_categories):
+        if not hist_all_categories: continue
+        bins = hist_all_categories[0][1][1]
+        names = [h[0] for h in hist_all_categories]
+        counts = [h[1][0] for h in hist_all_categories]
+        sg_names, bg_names, sg_counts, bg_counts = [], [], [], []
+        for name, count in zip(names, counts):
+            if name in config['signal-categories']:
+                sg_names.append(name); sg_counts.append(count)
+            else:
+                bg_names.append(name); bg_counts.append(count)
+        plt.clf()
+        if hist['stack-background']:
+            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='barstacked')
+        else:
+            plt.hist([bins[:-1]] * len(bg_counts), bins, weights=bg_counts, label=bg_names, histtype='stepfilled', alpha=0.5)
+        plt.hist([bins[:-1]] * len(sg_counts), bins, weights=sg_counts, label=sg_names, histtype='step')
         plt.xlabel(hist['name'])
         plt.ylabel('number')
         plt.xscale(hist['xscale'])
@@ -52,7 +68,7 @@ def run(config):
         plt.grid(axis='y')
         plt.legend()
         plt.tight_layout()
-        plt.savefig(hist['name'] + '.pdf')
+        plt.savefig('%s-%s-%s-%s.%s' % (hist['name'], hist['xscale'], hist['yscale'], 'stacked' if hist['stack-background'] else 'step', hist['format']))
 
 if __name__ == '__main__':
 
