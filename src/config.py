@@ -1,7 +1,6 @@
 import re
 import os
 import yaml
-import glob
 
 basedir = os.path.join(os.path.dirname(__file__), '..')
 
@@ -26,13 +25,23 @@ class Config(dict):
                     branches[ibranch] = branch_prefix + branch
 
         # Compute weight and list files for each sample on demand.
+        candidate_files = None
         luminosity = self['luminosity']
         for category in self['categories']:
             for sample in category['samples']:
                 if 'weight' not in sample:
                     sample['weight'] = sample['xs'] * 1e3 * luminosity / sample['nevent']
                 if 'files' not in sample:
-                    sample['files'] = glob.glob(os.path.join(self['sample-dir'], '%s_*_tree.root' % sample['name']))
+                    if candidate_files is None:
+                        # Group <self['sample-dir']>/<name>_<id>_tree.root by name.
+                        candidate_files = {}
+                        files = map(lambda s: s.rsplit('_', 2), os.listdir(self['sample-dir']))
+                        files = sorted((f[0], int(f[1])) for f in files if len(f) == 3 and f[2] == 'tree.root')
+                        for fname, fid in files:
+                            if fname not in candidate_files: candidate_files[fname] = []
+                            candidate_files[fname].append(fid)
+                    sample['files'] = [os.path.join(self['sample-dir'], '_'.join([sample['name'], str(fid), 'tree.root']))
+                                       for fid in candidate_files.get(sample['name'], [])]
 
         # Generate tagger determinate expression on demand.
         if 'expr' not in self['hists'][0]:
