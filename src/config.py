@@ -56,9 +56,10 @@ class Config(dict):
 
         # List active branches on demand.
         if 'active-branches' not in self:
+            re_identifier = re.compile(r'[A-Za-z_][A-Za-z0-9_]*')
             active_branches = set()
             for hist in self['hists']:
-                for branch in re.findall(r'[A-Za-z_][A-Za-z0-9_]*', hist['expr']):
+                for branch in re_identifier.findall(hist['expr']):
                     active_branches.add(branch)
             self['active-branches'] = sorted(active_branches)
 
