@@ -7,6 +7,7 @@ signal-branches: [Hss]
 background-branches: [QCDbb, QCDb, QCDcc, QCDc, QCDothers]
 branch-prefix: ak15_ParTMDV2_
 sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/1L/mc/pieces
+merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/1L/mc
 
 hists:
 

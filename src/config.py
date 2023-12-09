@@ -1,6 +1,7 @@
 import re
 import os
 import yaml
+import merge
 
 basedir = os.path.join(os.path.dirname(__file__), '..')
 
@@ -42,6 +43,9 @@ class Config(dict):
                             candidate_files[fname].append(fid)
                     sample['files'] = [os.path.join(self['sample-dir'], '_'.join([sample['name'], str(fid), 'tree.root']))
                                        for fid in candidate_files.get(sample['name'], [])]
+                if not self.get('do-not-merge') and not sample.get('do-not-merge') and 'merged-file' not in sample:
+                    sample['merged-file'] = os.path.join(self['merged-sample-dir'], '_'.join([sample['name'], 'bigtree.root']))
+                    merge.update_merged_root_file(sample['files'], sample['merged-file'])
 
         # Generate tagger determinate expression on demand.
         if 'expr' not in self['hists'][0]:
@@ -80,5 +84,5 @@ if __name__ == '__main__':
 
     # A concise example.
     config = Config(os.path.join(basedir, 'run', '2018', '1L', 'mc', 'zss_part', 'config.yaml'),
-                    {'sample-dir': os.path.join(basedir, 'example')})
+                    {'sample-dir': os.path.join(basedir, 'example'), 'do-not-merge': True})
     print(config)

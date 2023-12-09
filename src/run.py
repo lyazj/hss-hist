@@ -30,8 +30,13 @@ def run(config):
             xs += sample['xs']
             nevent += sample['nevent']
             weight = sample['weight']
-            files = [file + ':Events' for file in sample['files']]
+            files = sample.get('merged-file')
+            if files:
+                files = [files]
+            else:
+                files = sample['files']
             if not files: continue
+            files = [file + ':Events' for file in files]
 
             # Evaluate expressions.
             values = uproot.concatenate(files, expressions, library='np', how=tuple, allow_missing=True)
@@ -93,5 +98,5 @@ if __name__ == '__main__':
     import os
     from config import Config, basedir
     config = Config(os.path.join(basedir, 'run', '2018', '1L', 'mc', 'zss_part', 'config.yaml'),
-                    {'sample-dir': os.path.join(basedir, 'example')})
+                    {'sample-dir': os.path.join(basedir, 'example'), 'do-not-merge': True})
     run(config)
