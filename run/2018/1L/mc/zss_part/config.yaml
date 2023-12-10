@@ -18,6 +18,8 @@ hists:
     threshold: 0.0
     yscale: log
     grid: y
+    legend-options:
+      ncol: 2
 
   - name: kinBDT
     expr: kinBDT
@@ -38,6 +40,8 @@ hists:
     yscale: log
     grid: y
     stack-background: true
+    legend-options:
+      ncol: 2
 
 categories:
 
