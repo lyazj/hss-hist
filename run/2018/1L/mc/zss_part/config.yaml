@@ -26,9 +26,30 @@ hists:
     nbin: 50
     lb: 0.0
     ub: 1.0
+    yscale: log
+    grid: both
+    stack: true
+    no-stack-signal: true
+
+  - name: kinBDT
+    expr: kinBDT
+    nbin: 50
+    lb: 0.0
+    ub: 1.0
     window: '[0.72, 1.0]'
     grid: both
     stack: true
+
+  - name: mass
+    expr: ak15_regressed_mass
+    nbin: 50
+    lb: 50.0
+    ub: 300.0
+    xlabel: 'Mass [GeV]'
+    yscale: log
+    grid: both
+    stack: true
+    no-stack-signal: true
 
   - name: mass
     expr: ak15_regressed_mass

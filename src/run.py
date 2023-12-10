@@ -109,9 +109,11 @@ def run(config):
         plt.legend(**hist['legend-options'])
         plt.tight_layout()
         for extension in hist['format']:
-            plt.savefig('%s-%s-%s-%s.%s' % (
+            plt.savefig('%s-%s-%s-%s-%s.%s' % (
                 hist['name'], hist['xscale'], hist['yscale'],
-                'stack' if hist['stack'] else 'step', extension
+                'stack' if hist['stack'] else 'step',
+                'stack' if hist['stack'] and not hist['no-stack-signal'] else 'step',
+                extension
             ))
     plt.close()
 
