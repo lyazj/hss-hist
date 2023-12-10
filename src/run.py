@@ -1,7 +1,6 @@
 import mplhep as hep
 import numpy as np
 import uproot
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 plt.style.use(hep.style.CMS)
