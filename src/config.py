@@ -2,6 +2,7 @@ import re
 import os
 import yaml
 import merge
+import math
 
 basedir = os.path.join(os.path.dirname(__file__), '..')
 
@@ -57,14 +58,15 @@ class Config(dict):
         for hist in self['hists']:
             hist['preliminary'] = hist.get('preliminary', True)
             hist['supplementary'] = hist.get('supplementary', False)
-            hist['threshold'] = hist.get('threshold')
+            hist['window'] = eval(hist.get('window', '[-inf, +inf]'), {'inf': math.inf})
             hist['xlabel'] = hist.get('xlabel', hist['name'])
             hist['ylabel'] = hist.get('ylabel', 'number')
             hist['xscale'] = hist.get('xscale', 'linear')
             hist['yscale'] = hist.get('yscale', 'linear')
             hist['grid'] = hist.get('grid')
             hist['legend-options'] = hist.get('legend-options', {})
-            hist['stack-background'] = hist.get('stack-background', False)
+            hist['stack'] = hist.get('stack', False)
+            hist['no-stack-signal'] = hist.get('no-stack-signal', False)
             hist['format'] = hist.get('format', 'pdf').split(',')
 
         # List active branches on demand.

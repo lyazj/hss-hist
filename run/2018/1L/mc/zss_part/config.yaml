@@ -15,9 +15,9 @@ hists:
     nbin: 50
     lb: 0.0
     ub: 1.0
-    threshold: 0.0
+    window: '[0.5, 1.0]'
     yscale: log
-    grid: y
+    grid: both
     legend-options:
       ncol: 2
 
@@ -26,22 +26,19 @@ hists:
     nbin: 50
     lb: 0.0
     ub: 1.0
-    threshold: 0.0
-    yscale: log
-    grid: y
-    stack-background: true
+    window: '[0.72, 1.0]'
+    grid: both
+    stack: true
 
   - name: mass
     expr: ak15_regressed_mass
     nbin: 50
-    lb: 0.0
-    ub: 200.0
+    lb: 50.0
+    ub: 300.0
+    window: '[100.0, 130.0]'
     xlabel: 'Mass [GeV]'
-    yscale: log
-    grid: y
-    stack-background: true
-    legend-options:
-      ncol: 2
+    grid: both
+    stack: true
 
 categories:
 
