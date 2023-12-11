@@ -2,12 +2,13 @@ import mplhep as hep
 import numpy as np
 import uproot
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 
 plt.style.use(hep.style.CMS)
 
 def get_significance(s, b):
 
-    return np.sqrt(2 * ((s + b) * np.log(1 + s / b) - s))
+    return np.sqrt(2 * ((s + b) * np.log(1 + s / (b + (s == 0))) - s))
 
 def run(config):
 
@@ -71,7 +72,6 @@ def run(config):
     print('Summary: nsg=%d nbg=%d wsg=%f wbg=%f sig=%f' % (nsg, nbg, wsg, wbg, sig))
 
     # Draw and export histograms.
-    plt.figure(figsize=config['figsize'], dpi=config['dpi'])
     for hist, line_all_categories in zip(config['hists'], lines_all_categories):
         if not line_all_categories: continue
         bins = line_all_categories[0][1][1]
@@ -83,7 +83,10 @@ def run(config):
                 sg_names.append(name); sg_counts.append(count)
             else:
                 bg_names.append(name); bg_counts.append(count)
-        plt.clf()
+        fig = plt.figure(figsize=config['figsize'], dpi=config['dpi'])
+        gs = gridspec.GridSpec(hist['nsubplot-y'], hist['nsubplot-x'],
+                          width_ratios=hist['subplot-ratios-x'], height_ratios=hist['subplot-ratios-y'])
+        fig.add_subplot(gs[0])
         try:
             hep.cms.label(data=not config['mc'], paper=not hist['preliminary'], supplementary=hist['supplementary'],
                           year=config['year'], lumi=config['luminosity'])
@@ -107,6 +110,21 @@ def run(config):
         if hist['grid']: plt.grid(axis=hist['grid'])
         plt.legend(**hist['legend-options'])
         plt.tight_layout()
+        if hist['subplot-significance']:
+            plt.xlabel('')
+            plt.gca().set_xticklabels([])
+            fig.add_subplot(gs[1])
+            csg = np.sum(sg_counts, axis=0)
+            cbg = np.sum(bg_counts, axis=0)
+            csg = np.concatenate([np.cumsum(csg[::-1])[::-1], [0.0]])
+            cbg = np.concatenate([np.cumsum(cbg[::-1])[::-1], [0.0]])
+            sig = get_significance(csg, cbg)
+            plt.plot(bins, sig)
+            plt.xlabel(hist['xlabel'])
+            plt.ylabel('significance')
+            plt.xscale(hist['xscale'])
+            if hist['grid']: plt.grid(axis=hist['grid'])
+            plt.tight_layout()
         for extension in hist['format']:
             plt.savefig('%s-%s-%s-%s-%s.%s' % (
                 hist['name'], hist['xscale'], hist['yscale'],
@@ -114,7 +132,7 @@ def run(config):
                 'stack' if hist['stack'] and not hist['no-stack-signal'] else 'step',
                 extension
             ))
-    plt.close()
+        plt.close()
 
 if __name__ == '__main__':
 
