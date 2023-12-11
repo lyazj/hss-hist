@@ -1,7 +1,7 @@
 year: 2018
 channel: 1L
 mc: true
-luminosity: 54.4
+luminosity: 59.7
 signal-categories: [wzcc]
 sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/1L/mc/pieces
 merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/1L/mc
@@ -21,6 +21,7 @@ hists:
     no-stack-signal: true
     legend-options:
       ncol: 2
+    subplot-significance-lower: true
 
   - name: HccVSQCD
     expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
@@ -29,7 +30,7 @@ hists:
     nbin: 50
     lb: 0.0
     ub: 1.0
-    window: '[0.86, 1.0]'
+    window: '[0.00, 1.0]'
     yscale: log
     grid: both
     legend-options:
@@ -44,18 +45,19 @@ hists:
     grid: both
     stack: true
     no-stack-signal: true
+    subplot-significance-lower: true
 
   - name: kinBDT
     expr: kinBDT
     nbin: 50
     lb: 0.0
     ub: 1.0
-    window: '[0.00, 1.0]'
+    window: '[0.0, 1.0]'
     grid: both
     stack: true
 
   - name: mass
-    expr: ak15_regressed_mass
+    expr: 'ak15_sdmass'
     nbin: 50
     lb: 50.0
     ub: 300.0
@@ -64,13 +66,15 @@ hists:
     grid: both
     stack: true
     no-stack-signal: true
+    subplot-significance-lower: true
+    subplot-significance-upper: true
 
   - name: mass
-    expr: ak15_regressed_mass
+    expr: 'ak15_sdmass'
     nbin: 50
     lb: 50.0
     ub: 300.0
-    window: '[90.0, 130.0]'
+    window: '[0.0, inf]'
     xlabel: 'Mass [GeV]'
     grid: both
     stack: true

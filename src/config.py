@@ -57,7 +57,7 @@ class Config(dict):
             hist['subplot-significance-lower'] = hist.get('subplot-significance-lower', False)
             hist['subplot-significance-upper'] = hist.get('subplot-significance-upper', False)
             hist['nsubplot-x'] = hist.get('nsubplot-x', 1)
-            hist['nsubplot-y'] = hist.get('nsubplot-y', 1 + hist['subplot-significance-lower'] + hist['subplot-significance-upper'])
+            hist['nsubplot-y'] = hist.get('nsubplot-y', 1 + (hist['subplot-significance-lower'] or hist['subplot-significance-upper']))
             hist['subplot-ratios-x'] = hist.get('subplot-ratios-x', [1] * hist['nsubplot-x'])
             hist['subplot-ratios-y'] = hist.get('subplot-ratios-y', [4] + [1] * (hist['nsubplot-y'] - 1))
             hist['subplot-space-x'] = hist.get('subplot-space-x', None)
