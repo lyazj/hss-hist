@@ -21,6 +21,8 @@ hists:
     no-stack-signal: true
     legend-options:
       ncol: 2
+    subplot-significance-lower: true
+    subplot-significance-upper: true
 
   - name: HssVSQCD
     expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
@@ -44,6 +46,8 @@ hists:
     grid: both
     stack: true
     no-stack-signal: true
+    subplot-significance-lower: true
+    subplot-significance-upper: true
 
   - name: kinBDT
     expr: kinBDT
@@ -64,6 +68,8 @@ hists:
     grid: both
     stack: true
     no-stack-signal: true
+    subplot-significance-lower: true
+    subplot-significance-upper: true
 
   - name: mass
     expr: ak15_regressed_mass

@@ -83,10 +83,12 @@ def run(config):
                 sg_names.append(name); sg_counts.append(count)
             else:
                 bg_names.append(name); bg_counts.append(count)
-        fig = plt.figure(figsize=config['figsize'], dpi=config['dpi'])
+        fig = plt.figure(figsize=hist['figsize'], dpi=hist['dpi'])
         gs = gridspec.GridSpec(hist['nsubplot-y'], hist['nsubplot-x'],
                           width_ratios=hist['subplot-ratios-x'], height_ratios=hist['subplot-ratios-y'])
-        fig.add_subplot(gs[0])
+        gsi = 0
+        fig.add_subplot(gs[gsi])
+        gsi += 1
         try:
             hep.cms.label(data=not config['mc'], paper=not hist['preliminary'], supplementary=hist['supplementary'],
                           year=config['year'], lumi=config['luminosity'])
@@ -110,10 +112,13 @@ def run(config):
         if hist['grid']: plt.grid(axis=hist['grid'])
         plt.legend(**hist['legend-options'])
         plt.tight_layout()
-        if hist['subplot-significance']:
+
+        # Draw significance subplots.
+        if hist['subplot-significance-lower']:
             plt.xlabel('')
             plt.gca().set_xticklabels([])
-            fig.add_subplot(gs[1])
+            fig.add_subplot(gs[gsi])
+            gsi += 1
             csg = np.sum(sg_counts, axis=0)
             cbg = np.sum(bg_counts, axis=0)
             csg = np.concatenate([np.cumsum(csg[::-1])[::-1], [0.0]])
@@ -121,10 +126,28 @@ def run(config):
             sig = get_significance(csg, cbg)
             plt.plot(bins, sig)
             plt.xlabel(hist['xlabel'])
-            plt.ylabel('significance')
+            plt.ylabel('lower sig.')
             plt.xscale(hist['xscale'])
             if hist['grid']: plt.grid(axis=hist['grid'])
             plt.tight_layout()
+        if hist['subplot-significance-upper']:
+            plt.xlabel('')
+            plt.gca().set_xticklabels([])
+            fig.add_subplot(gs[gsi])
+            gsi += 1
+            csg = np.sum(sg_counts, axis=0)
+            cbg = np.sum(bg_counts, axis=0)
+            csg = np.concatenate([[0.0], np.cumsum(csg)])
+            cbg = np.concatenate([[0.0], np.cumsum(cbg)])
+            sig = get_significance(csg, cbg)
+            plt.plot(bins, sig)
+            plt.xlabel(hist['xlabel'])
+            plt.ylabel('upper sig.')
+            plt.xscale(hist['xscale'])
+            if hist['grid']: plt.grid(axis=hist['grid'])
+            plt.tight_layout()
+
+        # Export the plots.
         for extension in hist['format']:
             plt.savefig('%s-%s-%s-%s-%s.%s' % (
                 hist['name'], hist['xscale'], hist['yscale'],
