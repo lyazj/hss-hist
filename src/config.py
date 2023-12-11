@@ -18,14 +18,6 @@ class Config(dict):
     # Pre-process configuration.
     def preproc(self):
 
-        # Add branch prefixes on demand.
-        branch_prefix = self['branch-prefix']
-        for branches in 'signal-branches', 'background-branches':
-            branches = self[branches]
-            for ibranch, branch in enumerate(branches):
-                if branch.find(branch_prefix) != 0:
-                    branches[ibranch] = branch_prefix + branch
-
         # Compute weight and list files for each sample on demand.
         candidate_files = None
         luminosity = self['luminosity']
@@ -47,12 +39,6 @@ class Config(dict):
                 if not self.get('do-not-merge') and not sample.get('do-not-merge') and 'merged-file' not in sample:
                     sample['merged-file'] = os.path.join(self['merged-sample-dir'], '_'.join([sample['name'], 'bigtree.root']))
                     merge.update_merged_root_file(sample['files'], sample['merged-file'])
-
-        # Generate tagger determinate expression on demand.
-        if 'expr' not in self['hists'][0]:
-            tagger_expr = '1 / (1 + (%s) / (%s))' % \
-                    (' + '.join(self['background-branches']), ' + '.join(self['signal-branches']))
-            self['hists'][0]['expr'] = tagger_expr
 
         # Complete histogram attributes.
         for hist in self['hists']:

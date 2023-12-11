@@ -3,15 +3,29 @@ channel: 1L
 mc: true
 luminosity: 54.4
 signal-categories: [wzss]
-signal-branches: [Hss]
-background-branches: [QCDbb, QCDb, QCDcc, QCDc, QCDothers]
-branch-prefix: ak15_ParTMDV2_
 sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/1L/mc/pieces
 merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/1L/mc
 
 hists:
 
   - name: HssVSQCD
+    expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
+                         ak15_ParTMDV2_QCDcc + ak15_ParTMDV2_QCDc +
+                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hss)'
+    nbin: 50
+    lb: 0.0
+    ub: 1.0
+    yscale: log
+    grid: both
+    stack: true
+    no-stack-signal: true
+    legend-options:
+      ncol: 2
+
+  - name: HssVSQCD
+    expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
+                         ak15_ParTMDV2_QCDcc + ak15_ParTMDV2_QCDc +
+                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hss)'
     nbin: 50
     lb: 0.0
     ub: 1.0

@@ -18,6 +18,7 @@ def get_mtime(path):
         return 0.0
 
 def update_merged_root_file(filein, fileout):
+    print('Checking:', fileout)
     mtime_in = max(get_mtime(f) for f in filein)
     mtime_out = get_mtime(fileout)
     if mtime_in < mtime_out: return
