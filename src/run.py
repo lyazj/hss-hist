@@ -85,7 +85,8 @@ def run(config):
                 bg_names.append(name); bg_counts.append(count)
         fig = plt.figure(figsize=hist['figsize'], dpi=hist['dpi'])
         gs = gridspec.GridSpec(hist['nsubplot-y'], hist['nsubplot-x'],
-                          width_ratios=hist['subplot-ratios-x'], height_ratios=hist['subplot-ratios-y'])
+                               wspace=hist['subplot-space-x'], hspace=hist['subplot-space-y'],
+                               width_ratios=hist['subplot-ratios-x'], height_ratios=hist['subplot-ratios-y'])
         gsi = 0
         fig.add_subplot(gs[gsi])
         gsi += 1

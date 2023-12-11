@@ -60,6 +60,8 @@ class Config(dict):
             hist['nsubplot-y'] = hist.get('nsubplot-y', 1 + hist['subplot-significance-lower'] + hist['subplot-significance-upper'])
             hist['subplot-ratios-x'] = hist.get('subplot-ratios-x', [1] * hist['nsubplot-x'])
             hist['subplot-ratios-y'] = hist.get('subplot-ratios-y', [4] + [1] * (hist['nsubplot-y'] - 1))
+            hist['subplot-space-x'] = hist.get('subplot-space-x', None)
+            hist['subplot-space-y'] = hist.get('subplot-space-y', None)
             hist['figsize'] = hist.get('figsize', (12 * sum(hist['subplot-ratios-x']) / hist['subplot-ratios-x'][0],
                                                    9 * sum(hist['subplot-ratios-y']) / hist['subplot-ratios-y'][0]))
             hist['dpi'] = hist.get('dpi', 150)
