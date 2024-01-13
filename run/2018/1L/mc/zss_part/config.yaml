@@ -2,7 +2,7 @@ year: 2018
 channel: 1L
 mc: true
 luminosity: 59.7
-signal-categories: [wzss]
+signal-categories: ['$WZ\ (Z \to ss)$']
 sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/1L/mc/pieces
 merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/1L/mc
 
@@ -52,7 +52,7 @@ hists:
     nbin: 50
     lb: 0.0
     ub: 1.0
-    window: '[0.00, 1.0]'
+    window: '[0.0, 1.0]'
     grid: both
     stack: true
 
@@ -81,7 +81,7 @@ hists:
 
 categories:
 
-  - name: wzdd
+  - name: '$WZ\ (Z \to dd/uu)$'
     samples:
   
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-1
@@ -90,16 +90,13 @@ categories:
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-1
         xs: 2.563
   
-  - name: wzuu
-    samples:
-  
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-2
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1617824
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-2
         xs: 1.995
   
-  - name: wzss
+  - name: '$WZ\ (Z \to ss)$'
     samples:
   
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-3
@@ -108,7 +105,7 @@ categories:
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-3
         xs: 2.563
   
-  - name: wzcc
+  - name: '$WZ\ (Z \to cc)$'
     samples:
   
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-4
@@ -117,7 +114,7 @@ categories:
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-4
         xs: 1.998
   
-  - name: wjets
+  - name: '$W + jets$'
     samples:
   
       - name: HIG-RunIISummer20UL18MiniAODv2-00220
@@ -144,7 +141,7 @@ categories:
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00047
         xs: 0.5371
   
-  - name: zjets
+  - name: '$Z + jets$'
     samples:
   
       - name: HIG-RunIISummer20UL18MiniAODv2-00491
@@ -159,7 +156,7 @@ categories:
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00353
         xs: 318.2
   
-  - name: ttbar
+  - name: '$tt$'
     samples:
   
       - name: TOP-RunIISummer20UL18MiniAODv2-00104
@@ -174,7 +171,7 @@ categories:
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00039
         xs: 687.1
   
-  - name: st
+  - name: '$Single$-$t$'
     samples:
   
       - name: TOP-RunIISummer20UL18MiniAODv2-00110
