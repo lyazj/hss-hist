@@ -83,123 +83,185 @@ categories:
 
   - name: '$WZ\ (Z \to dd/uu)$'
     samples:
-  
+
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-1
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 2078474
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-1
         xs: 2.563
-  
+
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-2
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1617824
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-2
         xs: 1.995
-  
+
   - name: '$WZ\ (Z \to ss)$'
     samples:
-  
+
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-3
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 2078629
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-3
         xs: 2.563
-  
+
   - name: '$WZ\ (Z \to cc)$'
     samples:
-  
+
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-4
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1620560
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-4
         xs: 1.998
-  
+
   - name: '$W + jets$'
     samples:
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00220
         dataset: WJetsToLNu_Pt-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2000000
+        nevent: 2030806
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00059
         xs: 733.1
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00218
         dataset: WJetsToLNu_Pt-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2000000
+        nevent: 2013886
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00048
         xs: 27.92
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00219
         dataset: WJetsToLNu_Pt-400To600_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2000000
+        nevent: 2016883
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00049
         xs: 3.547
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00009
         dataset: WJetsToLNu_Pt-600ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2000000
+        nevent: 2007079
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00047
         xs: 0.5371
-  
+
   - name: '$Z + jets$'
     samples:
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00491
         dataset: DY1JetsToLL_M-10to50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8
         nevent: 4022761
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00352
         xs: 570.3
-  
+
       - name: HIG-RunIISummer20UL18MiniAODv2-00492
         dataset: DY2JetsToLL_M-10to50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8
         nevent: 3478247
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00353
         xs: 318.2
-  
+
+  - name: '$VV\ (other)$'
+
+      - name: EXO-RunIISummer20UL18MiniAODv2-01344
+        dataset: WWTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2070890
+        xs-name: EXO-RunIISummer20UL17MiniAODv2-01391
+        xs: 51.65
+
+      - name: SUS-RunIISummer20UL18MiniAODv2-00057
+        dataset: WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
+        nevent: 2051000
+        xs-name: SUS-RunIISummer20UL17MiniAODv2-00056
+        xs: 11.09
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00069
+        dataset: WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 9821283
+        xs-name: SMP-RunIISummer20UL17MiniAODv2-00059
+        xs: 5.257
+
+      - name: EXO-RunIISummer20UL18MiniAODv2-01347
+        dataset: WZTo1L3Nu_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2013790
+        xs-name: EXO-RunIISummer20UL17MiniAODv2-01394
+        xs: 3.414
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00054
+        dataset: WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2039277
+        xs-name: SMP-RunIISummer20UL17MiniAODv2-00044
+        xs: 6.565
+
+#       - name:
+#         dataset: (missing) <WZTo2L2Nu>
+#         nevent:
+#         xs-name:
+#         xs:
+#
+      - name: SMP-RunIISummer20UL18MiniAODv2-00103
+        dataset: ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2009005
+        xs-name: SMP-RunIISummer20UL17MiniAODv2-00093
+        xs: 3.676
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031
+        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2040869
+        xs-name: SMP-RunIIFall17MiniAODv2-00060  # [XXX] Fall17
+        xs: 4.561
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00877
+        dataset: ZZTo4L_TuneCP5_13TeV_powheg_pythia8
+        nevent: 2077000
+        xs-name: HIG-RunIIAutumn18MiniAOD-00016  # [XXX] Autumn18
+        xs: 1.325
+
+      - name: SUS-RunIISummer20UL18MiniAODv2-00053
+        dataset: ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8
+        nevent: 2087000
+        xs-name: SUS-RunIISummer20UL17MiniAODv2-00036
+        xs: 0.9738
+
   - name: '$tt$'
     samples:
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00104
         dataset: TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
-        nevent: 2000000
+        nevent: 2007000
         xs-name: PPD-RunIILowPUSummer20UL17MiniAODv2-00006
         xs: 687.1
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00084
         dataset: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
-        nevent: 2000000
+        nevent: 2016000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00039
         xs: 687.1
-  
+
   - name: '$Single$-$t$'
     samples:
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00110
         dataset: ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8
-        nevent: 2000000
+        nevent: 2032000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00155
         xs: 3.549
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00265
         dataset: ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
-        nevent: 2000000
+        nevent: 2018000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00247
         xs: 67.93
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00264
         dataset: ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
-        nevent: 2000000
+        nevent: 2003000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00246
         xs: 113.4
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00235
         dataset: ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8
-        nevent: 2000000
+        nevent: 2022000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00217
         xs: 32.51
-  
+
       - name: TOP-RunIISummer20UL18MiniAODv2-00234
         dataset: ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8
-        nevent: 2000000
+        nevent: 2047000
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00216
         xs: 32.45
