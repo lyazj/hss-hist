@@ -144,7 +144,53 @@ categories:
   - name: '$Z + jets$'
     samples:
 
-# [TODO]
+      - name: HIG-RunIISummer20UL18MiniAODv2-00917
+        dataset: Z1JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2033901
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00809
+        xs: 583.4
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00918
+        dataset: Z1JetsToNuNu_M-50_LHEFilterPtZ-150To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2077298
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00810
+        xs: 17.15
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00919
+        dataset: Z1JetsToNuNu_M-50_LHEFilterPtZ-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2013844
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00811
+        xs: 1.972
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00920
+        dataset: Z1JetsToNuNu_M-50_LHEFilterPtZ-400ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 1620546
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00812
+        xs: 0.216
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00921
+        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2064462
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00813
+        xs: 308.2
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00922
+        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-150To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2053566
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00814
+        xs: 29.28
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00923
+        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2001279
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00815
+        xs: 4.96
+
+      - name: HIG-RunIISummer20UL18MiniAODv2-00924
+        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-400ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 2004738
+        xs-name: HIG-RunIISummer20UL17MiniAODv2-00816
+        xs: 0.8318
 
   - name: '$VV\ (other)$'
     samples:
