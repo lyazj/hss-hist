@@ -1,17 +1,17 @@
 year: 2018
-channel: 1L
+channel: 0L
 mc: true
 luminosity: 59.7
-signal-categories: ['$WZ\ (Z \to cc)$']
-sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/1L/mc/pieces
-merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/1L/mc
+signal-categories: ['$WZ\ (Z \to ss)$']
+sample-dir: /eos/user/l/legao/hss/samples/Tree/2018/0L/mc/pieces
+merged-sample-dir: /eos/user/l/legao/hss/samples/BigTree/2018/0L/mc
 
 hists:
 
-  - name: HccVSQCD
+  - name: HssVSQCD
     expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
                          ak15_ParTMDV2_QCDcc + ak15_ParTMDV2_QCDc +
-                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hcc)'
+                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hss)'
     nbin: 50
     lb: 0.0
     ub: 1.0
@@ -23,10 +23,10 @@ hists:
       ncol: 2
     subplot-significance-lower: true
 
-  - name: HccVSQCD
+  - name: HssVSQCD
     expr: '1.0 / (1.0 + (ak15_ParTMDV2_QCDbb + ak15_ParTMDV2_QCDb +
                          ak15_ParTMDV2_QCDcc + ak15_ParTMDV2_QCDc +
-                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hcc)'
+                         ak15_ParTMDV2_QCDothers) / ak15_ParTMDV2_Hss)'
     nbin: 50
     lb: 0.0
     ub: 1.0
@@ -144,17 +144,7 @@ categories:
   - name: '$Z + jets$'
     samples:
 
-      - name: HIG-RunIISummer20UL18MiniAODv2-00491
-        dataset: DY1JetsToLL_M-10to50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8
-        nevent: 4022761
-        xs-name: HIG-RunIISummer20UL17MiniAODv2-00352
-        xs: 570.3
-
-      - name: HIG-RunIISummer20UL18MiniAODv2-00492
-        dataset: DY2JetsToLL_M-10to50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8
-        nevent: 3478247
-        xs-name: HIG-RunIISummer20UL17MiniAODv2-00353
-        xs: 318.2
+# [TODO]
 
   - name: '$VV\ (other)$'
     samples:

@@ -157,6 +157,7 @@ categories:
         xs: 318.2
 
   - name: '$VV\ (other)$'
+    samples:
 
       - name: EXO-RunIISummer20UL18MiniAODv2-01344
         dataset: WWTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
