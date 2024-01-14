@@ -49,11 +49,12 @@ def run(config):
             files = [file + ':Events' for file in files]
 
             # Evaluate expressions.
-            values = uproot.concatenate(files, expressions, library='np', how=tuple, allow_missing=True)
+            values = uproot.concatenate(files, [weight, *expressions], library='np', how=tuple, allow_missing=True)
+            weight, values = values[0], values[1:]
+            weight *= sample['xs'] * 1e3 * config['luminosity'] * (len(weight) / sample['nevent']) / np.sum(weight)  # [XXX] suppression ratio
 
             # Fill histograms. Use zero weights as masks.
-            weight_sum_before += len(values[0]) * weight
-            weight = np.ones_like(values[0]) * weight
+            weight_sum_before += np.sum(weight)
             for hist, line, value, window in zip(config['hists'], lines, values, windows):
                 line[0] += np.histogram(value, bins=line[1], weights=weight)[0]
                 nvalid = np.sum(weight.astype('bool').astype('int'))

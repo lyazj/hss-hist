@@ -19,12 +19,11 @@ class Config(dict):
     def preproc(self):
 
         # Compute weight and list files for each sample on demand.
+        self['weight'] = self.get('weight', 'genWeight * l1PreFiringWeight * elEffWeight * muEffWeight * pileupJetIdWeight * topptWeightNNLO * vhWeightEWK * vvWeightNNLO * puWeight')
         candidate_files = None
-        luminosity = self['luminosity']
         for category in self['categories']:
             for sample in category['samples']:
-                if 'weight' not in sample:
-                    sample['weight'] = sample['xs'] * 1e3 * luminosity / sample['nevent']
+                sample['weight'] = sample.get('weight', self['weight'])
                 if 'files' not in sample:
                     if candidate_files is None:
                         # Group <self['sample-dir']>/<name>_<id>_tree.root by name.
