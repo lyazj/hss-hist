@@ -6,6 +6,8 @@ import subprocess
 def merge_root_files(filein, fileout):
     print('Generating:', fileout)
     try:
+        subprocess.run(['rm', '-f', fileout])
+        subprocess.run(['mkdir', '-p', os.path.dirname(fileout)])
         subprocess.run(['hadd', '-k', '-O', '-j', fileout] + filein).check_returncode()
     except:
         subprocess.run(['rm', '-f', fileout])
