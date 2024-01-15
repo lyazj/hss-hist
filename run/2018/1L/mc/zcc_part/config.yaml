@@ -88,13 +88,13 @@ categories:
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 2078474
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-1
-        xs: 2.563
+        xs: 2.632
 
       - name: EXO-RunIISummer20UL18MiniAODv2-01346-2
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1617824
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-2
-        xs: 1.995
+        xs: 1.856
 
   - name: '$WZ\ (Z \to ss)$'
     samples:
@@ -103,7 +103,7 @@ categories:
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 2078629
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-3
-        xs: 2.563
+        xs: 2.632
 
   - name: '$WZ\ (Z \to cc)$'
     samples:
@@ -112,7 +112,7 @@ categories:
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1620560
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-4
-        xs: 1.998
+        xs: 1.999
 
   - name: '$W + jets$'
     samples:
@@ -201,11 +201,35 @@ categories:
         xs-name: SMP-RunIISummer20UL17MiniAODv2-00093
         xs: 3.676
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031-1
         dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2040869
-        xs-name: SMP-RunIIFall17MiniAODv2-00060  # [XXX] Fall17
-        xs: 4.561
+        nevent: 453677
+        xs-name: SMP-RunIIFall17MiniAODv2-00060-1  # [XXX] Fall17
+        xs: 1.032
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031-2
+        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 364688
+        xs-name: SMP-RunIIFall17MiniAODv2-00060-2  # [XXX] Fall17
+        xs: 0.728
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031-3
+        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 417092
+        xs-name: SMP-RunIIFall17MiniAODv2-00060-3  # [XXX] Fall17
+        xs: 1.032
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031-4
+        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 329918
+        xs-name: SMP-RunIIFall17MiniAODv2-00060-4  # [XXX] Fall17
+        xs: 0.784
+
+      - name: SMP-RunIISummer20UL18MiniAODv2-00031-5
+        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+        nevent: 442781
+        xs-name: SMP-RunIIFall17MiniAODv2-00060-5  # [XXX] Fall17
+        xs: 0.985
 
       - name: HIG-RunIISummer20UL18MiniAODv2-00877
         dataset: ZZTo4L_TuneCP5_13TeV_powheg_pythia8
