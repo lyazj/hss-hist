@@ -201,35 +201,35 @@ categories:
         xs-name: SMP-RunIISummer20UL17MiniAODv2-00093
         xs: 3.676
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031-1
-        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 453677
-        xs-name: SMP-RunIIFall17MiniAODv2-00060-1  # [XXX] Fall17
-        xs: 1.032
+#      - name: SMP-RunIISummer20UL18MiniAODv2-00031-1  # [FIXME] bad root file specification
+#        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 453677
+#        xs-name: SMP-RunIIFall17MiniAODv2-00060-1  # [XXX] Fall17
+#        xs: 1.032
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031-2
-        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 364688
-        xs-name: SMP-RunIIFall17MiniAODv2-00060-2  # [XXX] Fall17
-        xs: 0.728
+#      - name: SMP-RunIISummer20UL18MiniAODv2-00031-2  # [FIXME] bad root file specification
+#        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 364688
+#        xs-name: SMP-RunIIFall17MiniAODv2-00060-2  # [XXX] Fall17
+#        xs: 0.728
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031-3
-        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 417092
-        xs-name: SMP-RunIIFall17MiniAODv2-00060-3  # [XXX] Fall17
-        xs: 1.032
+#      - name: SMP-RunIISummer20UL18MiniAODv2-00031-3  # [FIXME] bad root file specification
+#        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 417092
+#        xs-name: SMP-RunIIFall17MiniAODv2-00060-3  # [XXX] Fall17
+#        xs: 1.032
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031-4
-        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 329918
-        xs-name: SMP-RunIIFall17MiniAODv2-00060-4  # [XXX] Fall17
-        xs: 0.784
+#      - name: SMP-RunIISummer20UL18MiniAODv2-00031-4  # [FIXME] bad root file specification
+#        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 329918
+#        xs-name: SMP-RunIIFall17MiniAODv2-00060-4  # [XXX] Fall17
+#        xs: 0.784
 
-      - name: SMP-RunIISummer20UL18MiniAODv2-00031-5
-        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 442781
-        xs-name: SMP-RunIIFall17MiniAODv2-00060-5  # [XXX] Fall17
-        xs: 0.985
+#      - name: SMP-RunIISummer20UL18MiniAODv2-00031-5  # [FIXME] bad root file specification
+#        dataset: ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 442781
+#        xs-name: SMP-RunIIFall17MiniAODv2-00060-5  # [XXX] Fall17
+#        xs: 0.985
 
       - name: HIG-RunIISummer20UL18MiniAODv2-00877
         dataset: ZZTo4L_TuneCP5_13TeV_powheg_pythia8
@@ -273,11 +273,11 @@ categories:
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00247
         xs: 67.93
 
-      - name: TOP-RunIISummer20UL18MiniAODv2-00264
-        dataset: ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
-        nevent: 2003000
-        xs-name: TOP-RunIISummer20UL17MiniAODv2-00246
-        xs: 113.4
+#      - name: TOP-RunIISummer20UL18MiniAODv2-00264  # [FIXME] bad root file specification
+#        dataset: ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
+#        nevent: 2003000
+#        xs-name: TOP-RunIISummer20UL17MiniAODv2-00246
+#        xs: 113.4
 
       - name: TOP-RunIISummer20UL18MiniAODv2-00235
         dataset: ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8

@@ -177,11 +177,11 @@ categories:
         xs-name: HIG-RunIISummer20UL17MiniAODv2-00812
         xs: 0.216
 
-      - name: HIG-RunIISummer20UL18MiniAODv2-00921
-        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
-        nevent: 2064462
-        xs-name: HIG-RunIISummer20UL17MiniAODv2-00813
-        xs: 308.2
+#      - name: HIG-RunIISummer20UL18MiniAODv2-00921  # [FIXME] bad root file specification
+#        dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+#        nevent: 2064462
+#        xs-name: HIG-RunIISummer20UL17MiniAODv2-00813
+#        xs: 308.2
 
       - name: HIG-RunIISummer20UL18MiniAODv2-00922
         dataset: Z2JetsToNuNu_M-50_LHEFilterPtZ-150To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
@@ -244,6 +244,7 @@ categories:
         dataset: WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
         nevent: 1620560
         xs-name: EXO-RunIISummer20UL17MiniAODv2-01393-4
+        xs: 1.999
 
       - name: EXO-RunIISummer20UL18MiniAODv2-01347
         dataset: WZTo1L3Nu_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
@@ -311,11 +312,11 @@ categories:
         xs-name: TOP-RunIISummer20UL17MiniAODv2-00247
         xs: 67.93
 
-      - name: TOP-RunIISummer20UL18MiniAODv2-00264
-        dataset: ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
-        nevent: 2003000
-        xs-name: TOP-RunIISummer20UL17MiniAODv2-00246
-        xs: 113.4
+#      - name: TOP-RunIISummer20UL18MiniAODv2-00264  # [FIXME] bad root file specification
+#        dataset: ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
+#        nevent: 2003000
+#        xs-name: TOP-RunIISummer20UL17MiniAODv2-00246
+#        xs: 113.4
 
       - name: TOP-RunIISummer20UL18MiniAODv2-00235
         dataset: ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8
