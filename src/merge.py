@@ -5,8 +5,8 @@ import subprocess
 
 def merge_root_files(filein, fileout):
     print('Generating:', fileout)
-    import ROOT
-    filein = [file for file in filein if ROOT.TFile(file).Get('Events').GetEntries()]
+    import uproot
+    filein = [file for file in filein if not print('Adding', file) and uproot.open(file)['Events'].num_entries]
     try:
         subprocess.run(['rm', '-f', fileout])
         subprocess.run(['mkdir', '-p', os.path.dirname(fileout)])
