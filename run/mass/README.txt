@@ -1,0 +1,9 @@
+AK15:
+AK15Puppi_mass
+AK15Puppi_rawFactor
+AK15Puppi_inclParTMDV2_resonanceMassCorr
+AK15Puppi_inclParTMDV2_visiableMassCorr
+
+AK8:
+FatJet_mass
+FatJet_particleNet_mass
