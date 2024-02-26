@@ -57,6 +57,7 @@ hists:
     stack: true
 
   - name: mass
+    #expr: '(1 - ak15_rawFactor) * ak15_mass * ak15_ParTMDV2_visiableMassCorr'
     expr: 'ak15_sdmass'
     nbin: 50
     lb: 50.0
@@ -70,6 +71,7 @@ hists:
     subplot-significance-upper: true
 
   - name: mass
+    #expr: '(1 - ak15_rawFactor) * ak15_mass * ak15_ParTMDV2_visiableMassCorr'
     expr: 'ak15_sdmass'
     nbin: 50
     lb: 50.0

@@ -51,13 +51,15 @@ def run(config):
             # Evaluate expressions.
             try:
                 values = uproot.concatenate(files, [weight, *expressions], library='np', how=tuple, allow_missing=True)
+                nevent = len(values[0])
+                values = [value[:sample['maxevent']] for value in values]
                 weight, values = values[0], values[1:]
             except Exception as e:
                 for file in files:
                     try: uproot.open(file).close(); raise e
                     except Exception: pass
                 continue
-            weight *= sample['xs'] * 1e3 * config['luminosity'] * (len(weight) / sample['nevent']) / np.sum(weight)  # [XXX] suppression ratio
+            weight *= sample['xs'] * 1e3 * config['luminosity'] * (nevent / sample['nevent']) / np.sum(weight)  # [XXX] suppression ratio
 
             # Fill histograms. Use zero weights as masks.
             weight_sum_before += np.sum(weight)

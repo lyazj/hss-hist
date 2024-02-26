@@ -20,10 +20,12 @@ class Config(dict):
 
         # Compute weight and list files for each sample on demand.
         self['weight'] = self.get('weight', 'genWeight * l1PreFiringWeight * elEffWeight * muEffWeight * pileupJetIdWeight * topptWeightNNLO * vhWeightEWK * vvWeightNNLO * puWeight')
+        self['maxevent'] = self.get('maxevent', 2**128 - 1)
         candidate_files = None
         for category in self['categories']:
             for sample in category['samples']:
                 sample['weight'] = sample.get('weight', self['weight'])
+                sample['maxevent'] = sample.get('maxevent', self['maxevent'])
                 if 'files' not in sample:
                     if candidate_files is None:
                         # Group <self['sample-dir']>/<name>_<id>_tree.root by name.
