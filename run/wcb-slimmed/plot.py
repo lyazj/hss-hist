@@ -8,6 +8,7 @@ import numpy as np
 import awkward as ak
 import mplhep as hep
 import matplotlib.pyplot as plt
+import pickle
 
 #NEVENT_MAX = 1000000
 NEVENT_MAX = None
@@ -136,6 +137,8 @@ def histplot(hists, cates):
     hep.histplot(hists,     stack=True,  histtype='fill', label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
     hep.histplot(wcb_hists, stack=False, histtype='step', label=[labels[cate] for cate in wcb_cates], color='black')
 
+plot = {'labels': labels}
+
 figure(figsize=(12, 9), dpi=150)
 sdmass_bins = np.linspace(20, 220, 51)
 sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
@@ -143,6 +146,7 @@ histplot(sdmass_hists, labels.keys())
 plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
 plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass.pdf')
 plt.close()
+plot['sdmass'] = sdmass_hists
 
 figure(figsize=(12, 9), dpi=150)
 HbcVSQCD_bins = np.linspace(0.0, 1.0, 51)
@@ -151,6 +155,7 @@ histplot(HbcVSQCD_hists, labels.keys())
 plt.xlabel('HbcVSQCD'); plt.ylabel('Events'); plt.yscale('log')
 plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-HbcVSQCD.pdf')
 plt.close()
+plot['HbcVSQCD'] = HbcVSQCD_hists
 
 figure(figsize=(12, 9), dpi=150)
 HbcVSQCD_bins = np.linspace(0.95, 1.0, 51)
@@ -159,6 +164,7 @@ histplot(HbcVSQCD_hists, labels.keys())
 plt.xlabel('HbcVSQCD'); plt.ylabel('Events'); plt.yscale('log')
 plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-HbcVSQCD-0.95.pdf')
 plt.close()
+plot['HbcVSQCD-0.95'] = HbcVSQCD_hists
 
 def cut(event, jet, cut):
     for feature, value in event.items(): event[feature] = value[cut]
@@ -176,6 +182,7 @@ histplot(sdmass_hists, labels.keys())
 plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
 plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-0.95.pdf')
 plt.close()
+plot['sdmass-0.95'] = sdmass_hists
 
 print('Cut HbcVSQCD >= 0.99:')
 for category in labels.keys():
@@ -188,3 +195,6 @@ histplot(sdmass_hists, labels.keys())
 plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
 plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-0.99.pdf')
 plt.close()
+plot['sdmass-0.99'] = sdmass_hists
+
+pickle.dump(plot, open('plot.pkl', 'wb'))
