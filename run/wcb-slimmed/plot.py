@@ -27,9 +27,9 @@ jet_expressions   = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
     ('phi',         '''Phij_V2_%s'''  ),
     ('sdmass',      '''Mj_V2_%s'''    ),
     ('probHbc',     '''%s_Hbc'''      ),
-    #('probHbs',     '''%s_Hbs'''      ),
     #('probHcs',     '''%s_Hcs'''      ),
     #('probHothers', '''%s_Hbb +
+    #                   %s_Hbs +
     #                   %s_Hcc +
     #                   %s_Hee +
     #                   %s_Hgg +
@@ -171,30 +171,18 @@ def cut(event, jet, cut):
     for i in range(len(jet_labels)):
         for feature, value in jet[i].items(): jet[i][feature] = value[cut]
 
-print('Cut HbcVSQCD >= 0.95:')
-for category in labels.keys():
-    cut(events[category], jets[category], jets[category][0]['HbcVSQCD'] >= 0.95)
-    print('  - %s:\t%d' % (category, len(events[category]['weight'])))
-figure(figsize=(12, 9), dpi=150)
-sdmass_bins = np.linspace(20, 220, 51)
-sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
-histplot(sdmass_hists, labels.keys())
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
-plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-0.95.pdf')
-plt.close()
-plot['sdmass-0.95'] = sdmass_hists
-
-print('Cut HbcVSQCD >= 0.99:')
-for category in labels.keys():
-    cut(events[category], jets[category], jets[category][0]['HbcVSQCD'] >= 0.99)
-    print('  - %s:\t%d' % (category, len(events[category]['weight'])))
-figure(figsize=(12, 9), dpi=150)
-sdmass_bins = np.linspace(20, 220, 51)
-sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
-histplot(sdmass_hists, labels.keys())
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
-plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-0.99.pdf')
-plt.close()
-plot['sdmass-0.99'] = sdmass_hists
+for threshold in sorted([0.95, 0.98, 0.99, 0.995, 0.998, 0.999]):
+    print('Cut HbcVSQCD >= %.3f:' % threshold)
+    for category in labels.keys():
+        cut(events[category], jets[category], jets[category][0]['HbcVSQCD'] >= threshold)
+        print('  - %s:\t%d' % (category, len(events[category]['weight'])))
+    figure(figsize=(12, 9), dpi=150)
+    sdmass_bins = np.linspace(20, 220, 51)
+    sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
+    histplot(sdmass_hists, labels.keys())
+    plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
+    plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-%.3f.pdf' % threshold)
+    plt.close()
+    plot['sdmass-%.3f' % threshold] = sdmass_hists
 
 pickle.dump(plot, open('plot.pkl', 'wb'))

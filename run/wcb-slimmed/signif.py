@@ -73,32 +73,15 @@ def signif(hists, cates):
     plt.plot([], [], 'k--', label='optimal (%.3f)' % signif_max)
     plt.legend()
 
-fig = figure(figsize=(12, 11.25), dpi=150)
-sdmass_hists = plot['sdmass']
-histplot(sdmass_hists, labels.keys())
-plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
-plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
-signif(sdmass_hists, labels.keys())
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
-plt.tight_layout(); savefig('plot-sdmass-sig.pdf')
-plt.close()
-
-fig = figure(figsize=(12, 11.25), dpi=150)
-sdmass_hists = plot['sdmass-0.95']
-histplot(sdmass_hists, labels.keys())
-plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
-plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
-signif(sdmass_hists, labels.keys())
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
-plt.tight_layout(); savefig('plot-sdmass-0.95-sig.pdf')
-plt.close()
-
-fig = figure(figsize=(12, 11.25), dpi=150)
-sdmass_hists = plot['sdmass-0.99']
-histplot(sdmass_hists, labels.keys())
-plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
-plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
-signif(sdmass_hists, labels.keys())
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
-plt.tight_layout(); savefig('plot-sdmass-0.99-sig.pdf')
-plt.close()
+print(*plot.keys())
+for name in plot:
+    if name[:6] != 'sdmass': continue
+    fig = figure(figsize=(12, 11.25), dpi=150)
+    sdmass_hists = plot[name]
+    histplot(sdmass_hists, labels.keys())
+    plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
+    plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
+    signif(sdmass_hists, labels.keys())
+    plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
+    plt.tight_layout(); savefig('plot-%s-sig.pdf' % name)
+    plt.close()
