@@ -47,7 +47,7 @@ jet_expressions   = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
 ]))
 jet_labels = ['a', 'b', 'c']
 labels = {
-    'Wcb':   r'W + Jets ($W \to cb$)',
+    'Wcb':   r'W + Jets and Top ($W \to cb$)',
     'QCD':   r'QCD',
     'WJets': r'W + Jets ($W \to \mathrm{others}$)',
     'Top':   r'Top',
