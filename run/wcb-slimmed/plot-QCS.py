@@ -109,7 +109,7 @@ for i in range(len(jet_labels)):
 
 for category in labels.keys():
     for i in range(len(jet_labels)):
-        jets[category][i]['HbcVSQCD'] = 1.0 / (1.0 + jets[category][i]['probQCD'] / jets[category][i]['probHbc'])
+        jets[category][i]['HbcVSQCS'] = 1.0 / (1.0 + (jets[category][i]['probQCD'] + jets[category][i]['probHcs']) / jets[category][i]['probHbc'])
 
 def figure(*args, **kwargs):
     plt.figure(*args, **kwargs)
@@ -138,27 +138,27 @@ sdmass_bins = np.linspace(20, 220, 51)
 sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
 histplot(sdmass_hists, labels.keys())
 plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
-plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass.pdf')
+plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-QCS-sdmass.pdf')
 plt.close()
 plot['sdmass'] = sdmass_hists
 
 figure(figsize=(12, 9), dpi=150)
-HbcVSQCD_bins = np.linspace(0.0, 1.0, 51)
-HbcVSQCD_hists = [np.histogram(jets[category][0]['HbcVSQCD'], HbcVSQCD_bins, weights=events[category]['weight']) for category in labels.keys()]
-histplot(HbcVSQCD_hists, labels.keys())
-plt.xlabel('HbcVSQCD'); plt.ylabel('Events'); plt.yscale('log')
-plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-HbcVSQCD.pdf')
+HbcVSQCS_bins = np.linspace(0.0, 1.0, 51)
+HbcVSQCS_hists = [np.histogram(jets[category][0]['HbcVSQCS'], HbcVSQCS_bins, weights=events[category]['weight']) for category in labels.keys()]
+histplot(HbcVSQCS_hists, labels.keys())
+plt.xlabel('HbcVSQCS'); plt.ylabel('Events'); plt.yscale('log')
+plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-QCS-HbcVSQCS.pdf')
 plt.close()
-plot['HbcVSQCD'] = HbcVSQCD_hists
+plot['HbcVSQCS'] = HbcVSQCS_hists
 
 figure(figsize=(12, 9), dpi=150)
-HbcVSQCD_bins = np.linspace(0.95, 1.0, 51)
-HbcVSQCD_hists = [np.histogram(jets[category][0]['HbcVSQCD'], HbcVSQCD_bins, weights=events[category]['weight']) for category in labels.keys()]
-histplot(HbcVSQCD_hists, labels.keys())
-plt.xlabel('HbcVSQCD'); plt.ylabel('Events'); plt.yscale('log')
-plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-HbcVSQCD-0.95.pdf')
+HbcVSQCS_bins = np.linspace(0.95, 1.0, 51)
+HbcVSQCS_hists = [np.histogram(jets[category][0]['HbcVSQCS'], HbcVSQCS_bins, weights=events[category]['weight']) for category in labels.keys()]
+histplot(HbcVSQCS_hists, labels.keys())
+plt.xlabel('HbcVSQCS'); plt.ylabel('Events'); plt.yscale('log')
+plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-QCS-HbcVSQCS-0.95.pdf')
 plt.close()
-plot['HbcVSQCD-0.95'] = HbcVSQCD_hists
+plot['HbcVSQCS-0.95'] = HbcVSQCS_hists
 
 def cut(event, jet, cut):
     for feature, value in event.items(): event[feature] = value[cut]
@@ -166,17 +166,17 @@ def cut(event, jet, cut):
         for feature, value in jet[i].items(): jet[i][feature] = value[cut]
 
 for threshold in sorted([0.95, 0.98, 0.99, 0.995, 0.998, 0.999]):
-    print('Cut HbcVSQCD >= %.3f:' % threshold)
+    print('Cut HbcVSQCS >= %.3f:' % threshold)
     for category in labels.keys():
-        cut(events[category], jets[category], jets[category][0]['HbcVSQCD'] >= threshold)
+        cut(events[category], jets[category], jets[category][0]['HbcVSQCS'] >= threshold)
         print('  - %s:\t%d' % (category, len(events[category]['weight'])))
     figure(figsize=(12, 9), dpi=150)
     sdmass_bins = np.linspace(20, 220, 51)
     sdmass_hists = [np.histogram(jets[category][0]['sdmass'], sdmass_bins, weights=events[category]['weight']) for category in labels.keys()]
     histplot(sdmass_hists, labels.keys())
     plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Events'); plt.yscale('log')
-    plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-sdmass-%.3f.pdf' % threshold)
+    plt.legend(); plt.grid(); plt.tight_layout(); plt.savefig('plot-QCS-sdmass-%.3f.pdf' % threshold)
     plt.close()
     plot['sdmass-%.3f' % threshold] = sdmass_hists
 
-pickle.dump(plot, open('plot.pkl', 'wb'))
+pickle.dump(plot, open('plot-QCS.pkl', 'wb'))
