@@ -33,8 +33,8 @@ def histplot(hists, cates):
     items = sorted(zip(count_sums, cates, counts, bins))
     cates      = [item[1]            for item in items]
     hists      = [(item[2], item[3]) for item in items]
-    hep.histplot(hists,     stack=True,  histtype='fill', label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
-    hep.histplot(wcb_hists, stack=False, histtype='step', label=[labels[cate] for cate in wcb_cates], color='black')
+    hep.histplot(hists,     yerr=True, stack=True,  histtype='fill', label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
+    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step', label=[labels[cate] for cate in wcb_cates], color='black')
 
 def savefig(path, *args, **kwargs):
     print('Saving to %s...' % path)
