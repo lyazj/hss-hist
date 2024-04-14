@@ -21,16 +21,16 @@ NEVENT_MAX = None
 #NEVENT_MAX = 1000000
 
 event_expressions = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
-    ('isWcb',       '''isWcb'''       ),
-    ('weight',      '''weight'''      ),
+    ('isWcb',  '''isWcb'''),
+    ('weight', '''weight'''),
 ]))
 jet_expressions   = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
-    #('%s_pT',          '''PTj_V2_%s'''   ),
-    #('%s_eta',         '''Etaj_V2_%s'''  ),
-    #('%s_phi',         '''Phij_V2_%s'''  ),
-    ('%s_sdmass',      '''Mj_V2_%s'''    ),
-    ('%s_probHbc',     '''%s_Hbc'''      ),
-    ('%s_probHcs',     '''%s_Hcs'''      ),
+    #('%s_pT',          '''PTj_V2_%s'''),
+    #('%s_eta',         '''Etaj_V2_%s'''),
+    #('%s_phi',         '''Phij_V2_%s'''),
+    ('%s_sdmass',      '''Mj_V2_%s'''),
+    ('%s_probHbc',     '''%s_Hbc'''),
+    ('%s_probHcs',     '''%s_Hcs'''),
     #('%s_probHothers', '''%s_Hbb +
     #                   %s_Hbs +
     #                   %s_Hcc +
@@ -40,7 +40,7 @@ jet_expressions   = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
                        %s_QCDbb +
                        %s_QCDc +
                        %s_QCDcc +
-                       %s_QCDothers'''   ),
+                       %s_QCDothers'''),
 ]))
 #jet_labels = ['a', 'b', 'c']
 jet_labels = ['a']
@@ -103,7 +103,7 @@ for rootfile in rootfiles:
 
 # Merge Wcb events from different categories.
 events['Wcb'] = ak.concatenate(events['Wcb'])
-labels = {category: labels[category] for category in events}
+categories = list(events.keys())
 
 def figure(*args, **kwargs):
     fig = plt.figure(*args, **kwargs)
@@ -163,16 +163,33 @@ def signif(hists, cates):
 
 threshold = 0.995
 print('Cut HbcVSQCS >= %.3f:' % threshold)
-for category in labels.keys():
-    cut_events = events[category][events[category]['a_HbcVSQCS'] >= threshold]
-    print('  - %s:\t%d' % (category, len(cut_events)))
+cut_events = { }
+for category in categories:
+    cut_events[category] = events[category][events[category]['a_HbcVSQCS'] >= threshold]
+    print('  - %s:\t%d' % (category, len(cut_events[category])))
 fig = figure(figsize=(12, 11.25), dpi=150)
 sdmass_bins = np.linspace(20, 220, 51)
-sdmass_hists = [np.histogram(cut_events['a_sdmass'], sdmass_bins, weights=cut_events['weight']) for category in labels.keys()]
-histplot(sdmass_hists, labels.keys())
+sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
+histplot(sdmass_hists, categories)
 plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
 plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
-signif(sdmass_hists, labels.keys())
+signif(sdmass_hists, categories)
 plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
 plt.tight_layout(); savefig('sr-%.3f.pdf' % threshold)
+plt.close()
+
+print('Cut HbcVSQCS < %.3f:' % threshold)
+cut_events = { }
+for category in categories:
+    cut_events[category] = events[category][events[category]['a_HbcVSQCS'] < threshold]
+    print('  - %s:\t%d' % (category, len(cut_events[category])))
+fig = figure(figsize=(12, 11.25), dpi=150)
+sdmass_bins = np.linspace(20, 220, 51)
+sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
+histplot(sdmass_hists, categories)
+plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
+plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
+signif(sdmass_hists, categories)
+plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
+plt.tight_layout(); savefig('sr-%.3f-rem.pdf' % threshold)
 plt.close()
