@@ -76,8 +76,8 @@ def concatenate(files, expressions, n=None):
         for alias, origin in jet_expressions:
             aliased_events[alias.replace('%s', jet_label)] = events[origin.replace('%s', jet_label)]
         aliased_events['%s_HbcVSQCS' % jet_label] = 1.0 / (1.0 + (
-            aliased_events['%s_probQCD' % jet_label] +
-            aliased_events['%s_probHcs' % jet_label]
+            0.997032 * aliased_events['%s_probQCD' % jet_label] +
+            0.002968 * aliased_events['%s_probHcs' % jet_label]
         ) / aliased_events['%s_probHbc' % jet_label])
     return aliased_events
 

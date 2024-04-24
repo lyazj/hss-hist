@@ -109,7 +109,7 @@ for i in range(len(jet_labels)):
 
 for category in labels.keys():
     for i in range(len(jet_labels)):
-        jets[category][i]['HbcVSQCS'] = 1.0 / (1.0 + (jets[category][i]['probQCD'] + jets[category][i]['probHcs']) / jets[category][i]['probHbc'])
+        jets[category][i]['HbcVSQCS'] = 1.0 / (1.0 + (0.997032 * jets[category][i]['probQCD'] + 0.002968 * jets[category][i]['probHcs']) / jets[category][i]['probHbc'])
 
 def figure(*args, **kwargs):
     plt.figure(*args, **kwargs)
