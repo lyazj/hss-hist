@@ -15,10 +15,10 @@ logfile = open(re.sub(r'\.py$', '.log', __file__), 'w')
 def print(*args, **kwargs): builtins.print(*args, **kwargs); builtins.print(*args, **{**kwargs, 'file': logfile})
 
 plt.style.use(hep.style.CMS)
-gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
+gs = gridspec.GridSpec(3, 1, height_ratios=[4, 1, 1])
 
-#NEVENT_MAX = None
-NEVENT_MAX = 1000000  # [DEBUG]
+NEVENT_MAX = None
+#NEVENT_MAX = 1000000
 
 event_expressions = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
     ('isWcb',  '''isWcb'''),
@@ -86,39 +86,39 @@ def concatenate(files, expressions, n=None):
 # Categorized events.
 events = { 'Wcb': [] }
 
-#for mcfile in mcfiles:
-#    # Extract category from pathname.
-#    match = mcfile_pattern.search(mcfile)
-#    if not match: continue
-#    category = match.group(1)
-#    if category == 'Wcb': raise RuntimeError('unexpected category: Wcb')
-#    if category not in labels: continue
-#
-#    # Split Wcb and non-Wcb events.
-#    print('Loading %s events...' % category)
-#    current_events = concatenate([mcfile + ':PKUTree'], expressions, NEVENT_MAX)
-#    wcb_events    = current_events[current_events['isWcb'] == True ]
-#    nonwcb_events = current_events[current_events['isWcb'] == False]
-#    print('%d events (%d Wcb) loaded from %s.' % (len(current_events), len(wcb_events), mcfile))
-#    events['Wcb'].append(wcb_events)
-#    events[category] = nonwcb_events
+for mcfile in mcfiles:
+    # Extract category from pathname.
+    match = mcfile_pattern.search(mcfile)
+    if not match: continue
+    category = match.group(1)
+    if category == 'Wcb': raise RuntimeError('unexpected category: Wcb')
+    if category not in labels: continue
+
+    # Split Wcb and non-Wcb events.
+    print('Loading %s events...' % category)
+    current_events = concatenate([mcfile + ':PKUTree'], expressions, NEVENT_MAX)
+    wcb_events    = current_events[current_events['isWcb'] == True ]
+    nonwcb_events = current_events[current_events['isWcb'] == False]
+    print('%d events (%d Wcb) loaded from %s.' % (len(current_events), len(wcb_events), mcfile))
+    events['Wcb'].append(wcb_events)
+    events[category] = nonwcb_events
 
 # Merge Wcb events from different categories.
 if not events['Wcb']:
     del events['Wcb']
 else:
     events['Wcb'] = ak.concatenate(events['Wcb'])
-categories = list(events.keys())
 
 # Load data.
 print('Loading data...')
 events['data'] = concatenate([datafile + ':PKUTree' for datafile in datafiles], expressions, NEVENT_MAX)
 print('Blinding data...')
 events['data'] = ak.concatenate([
-    events['data'][events['data']['a_sdmass'] < 100],
-    events['data'][events['data']['a_sdmass'] > 150],
+    events['data'][events['data']['a_sdmass'] <  50],
+    events['data'][events['data']['a_sdmass'] > 110],
 ])
-exit()  # [TODO]
+
+categories = list(events.keys())
 
 def figure(*args, **kwargs):
     fig = plt.figure(*args, **kwargs)
@@ -130,6 +130,12 @@ def figure(*args, **kwargs):
     return fig
 
 def histplot(hists, cates):
+    data_hist = None
+    hs, cs = [], []
+    for hist, cate in zip(hists, cates):
+        if cate == 'data': data_hist = hist; continue
+        hs.append(hist); cs.append(cate)
+    hists, cates = hs, cs
     counts     = [hist[0] for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     bins       = [hist[1] for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     wcb_hists  = [hist    for (hist, cate) in zip(hists, cates) if cate == 'Wcb']
@@ -139,8 +145,11 @@ def histplot(hists, cates):
     items = sorted(zip(count_sums, cates, counts, bins))
     cates      = [item[1]            for item in items]
     hists      = [(item[2], item[3]) for item in items]
-    hep.histplot(hists,                stack=True,  histtype='fill', label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
-    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step', label=[labels[cate] for cate in wcb_cates], color='black')
+    hep.histplot(hists,                stack=True,  histtype='fill',     label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
+    plt.errorbar(np.mean([bins[0][:-1], bins[0][1:]], axis=0), np.sum(counts, axis=0), yerr=np.sqrt(np.sum(counts, axis=0)), linestyle='', color='black')
+    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step',     label=[labels[cate] for cate in wcb_cates], color='black')
+    if not data_hist: return
+    hep.histplot(data_hist, yerr=True, stack=False, histtype='errorbar', label='data', color='black')
 
 def savefig(path, *args, **kwargs):
     print('Saving to %s...' % path)
@@ -150,6 +159,11 @@ def get_signif(s, b):
     return np.sqrt(2 * ((s + b) * np.log(1 + s / (b + (s == 0))) - s))
 
 def signif(hists, cates):
+    hs, cs = [], []
+    for hist, cate in zip(hists, cates):
+        if cate == 'data': continue
+        hs.append(hist); cs.append(cate)
+    hists, cates = hs, cs
     wcb_hists  = [hist    for (hist, cate) in zip(hists, cates) if cate == 'Wcb']
     hists      = [hist    for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     bins = wcb_hists[0][1]
@@ -177,12 +191,42 @@ def signif(hists, cates):
     plt.legend()
     return signif_max
 
+def data_over_mc(hists, cates):
+    data_hist = None
+    hs, cs = [], []
+    for hist, cate in zip(hists, cates):
+        if cate == 'data': data_hist = hist; continue
+        hs.append(hist); cs.append(cate)
+    hists, cates = hs, cs
+    bins = data_hist[1]
+    d = data_hist[0]
+    m = np.sum([hist[0] for hist in hists], axis=0)
+    dom = d / (m + (d == 0))
+    err_dom = dom * np.hypot(1 / np.sqrt(d + (d == 0)), 1 / np.sqrt(m + (m == 0)))
+    x = np.mean([bins[:-1], bins[1:]], axis=0)
+    plt.ylim(-0.2, 1.8)
+    plt.errorbar(x, dom, yerr=err_dom, fmt='ko')
+
 print('B veto:')
 cut_events = { }
 for category in categories:
     cut_events[category] = events[category][events[category]['nb'] == 0]
     print('  - %s:\t%d' % (category, len(cut_events[category])))
 events = cut_events
+
+fig = figure(figsize=(12, 13.5), dpi=150)
+sdmass_bins = np.linspace(20, 220, 21)
+sdmass_hists = [np.histogram(events[category]['a_sdmass'], sdmass_bins, weights=events[category]['weight']) for category in categories]
+histplot(sdmass_hists, categories)
+plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
+plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
+s = signif(sdmass_hists, categories)
+plt.ylabel('Significance'); plt.grid()
+plt.gca().set_xticklabels([]); fig.add_subplot(gs[2])
+data_over_mc(sdmass_hists, categories)
+plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Data/MC'); plt.grid()
+plt.tight_layout(); savefig('all.pdf')
+plt.close()
 
 thresholds = [
     [0.990, 0.995, 0.998, 0.999],
@@ -201,14 +245,17 @@ for iSR in range(len(thresholds)):
             cut_events[category] = events[category][events[category]['a_HbcVSQCS'] >= threshold]
             print('  - %s:\t%d' % (category, len(cut_events[category])))
 
-        fig = figure(figsize=(12, 11.25), dpi=150)
-        sdmass_bins = np.linspace(20, 220, 51)
+        fig = figure(figsize=(12, 13.5), dpi=150)
+        sdmass_bins = np.linspace(20, 220, 21)
         sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
         histplot(sdmass_hists, categories)
         plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
         s = signif(sdmass_hists, categories)
-        plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
+        plt.ylabel('Significance'); plt.grid()
+        plt.gca().set_xticklabels([]); fig.add_subplot(gs[2])
+        data_over_mc(sdmass_hists, categories)
+        plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Data/MC'); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f.pdf' % (iSR + 1, threshold))
         plt.close()
 
