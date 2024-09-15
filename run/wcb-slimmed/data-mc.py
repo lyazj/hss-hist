@@ -259,6 +259,14 @@ for iSR in range(len(thresholds)):
         plt.tight_layout(); savefig('sr%d-%.3f.pdf' % (iSR + 1, threshold))
         plt.close()
 
+        fig = figure(figsize=(12, 9), dpi=150)
+        weight_bins = np.logspace(-3, 3, 61)
+        weight_hists = [np.histogram(cut_events[category]['weight'], weight_bins) for category in categories]
+        histplot(weight_hists, categories)
+        plt.ylabel('Weight'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
+        plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
+        plt.close()
+
         if s > s_best: s_best = s; threshold_best = threshold
 
     threshold = threshold_best
