@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 
 import re
 import uproot
@@ -56,7 +56,7 @@ labels = {
 }
 mcfiles = glob.glob('samples/2018/mc/*.root')
 datafiles = glob.glob('samples/2018/data/Tree_JetHT_*.root')
-mcfile_pattern = re.compile('^.*Tree_(.*)\.root$')
+mcfile_pattern = re.compile(r'^.*Tree_(.*)\.root$')
 
 # Compute expressions to be evaluated on input ROOT files.
 expressions = [expression[1] for expression in event_expressions]
