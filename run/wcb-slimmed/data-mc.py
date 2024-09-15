@@ -55,7 +55,7 @@ labels = {
     'Rest':  r'Others',
 }
 mcfiles = glob.glob('samples/2018/mc/*.root')
-datafiles = glob.glob('samples/2018/data/*.root')
+datafiles = glob.glob('samples/2018/data/Tree_JetHT_*.root')
 mcfile_pattern = re.compile('^.*Tree_(.*)\.root$')
 
 # Compute expressions to be evaluated on input ROOT files.
