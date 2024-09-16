@@ -216,7 +216,7 @@ events = cut_events
 
 fig = figure(figsize=(12, 13.5), dpi=150)
 sdmass_bins = np.linspace(20, 220, 21)
-sdmass_hists = [np.histogram(events[category]['a_sdmass'], sdmass_bins, weights=events[category]['weight']) for category in categories]
+sdmass_hists = [np.histogram(events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=events[category]['weight'].to_numpy()) for category in categories]
 histplot(sdmass_hists, categories)
 plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
 plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
@@ -247,7 +247,7 @@ for iSR in range(len(thresholds)):
 
         fig = figure(figsize=(12, 13.5), dpi=150)
         sdmass_bins = np.linspace(20, 220, 21)
-        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
+        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=cut_events[category]['weight'].to_numpy()) for category in categories]
         histplot(sdmass_hists, categories)
         plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
@@ -261,7 +261,7 @@ for iSR in range(len(thresholds)):
 
         fig = figure(figsize=(12, 9), dpi=150)
         weight_bins = np.logspace(-3, 3, 61)
-        weight_hists = [np.histogram(cut_events[category]['weight'], weight_bins) for category in categories]
+        weight_hists = [np.histogram(cut_events[category]['weight'].to_numpy(), weight_bins) for category in categories]
         histplot(weight_hists, categories)
         plt.ylabel('Weight'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
