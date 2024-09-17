@@ -124,9 +124,9 @@ def figure(*args, **kwargs):
     fig = plt.figure(*args, **kwargs)
     fig.add_subplot(gs[0])
     try:
-        hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.7)
+        hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
     except Exception:
-        hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.7)
+        hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
     return fig
 
 def histplot(hists, cates):
@@ -259,11 +259,13 @@ for iSR in range(len(thresholds)):
         plt.tight_layout(); savefig('sr%d-%.3f.pdf' % (iSR + 1, threshold))
         plt.close()
 
-        fig = figure(figsize=(12, 9), dpi=150)
+        fig = plt.figure(figsize=(12, 9), dpi=150)
+        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
+        except Exception: hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
         weight_bins = np.logspace(-3, 3, 61)
         weight_hists = [np.histogram(cut_events[category]['weight'].to_numpy(), weight_bins) for category in categories]
         histplot(weight_hists, categories)
-        plt.ylabel('Weight'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
+        plt.xlabel('Weight'); plt.ylabel('Unweighted events'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
         plt.close()
 
