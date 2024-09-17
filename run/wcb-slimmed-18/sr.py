@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 import re
 import uproot
@@ -15,12 +15,13 @@ logfile = open(re.sub(r'\.py$', '.log', __file__), 'w')
 def print(*args, **kwargs): builtins.print(*args, **kwargs); builtins.print(*args, **{**kwargs, 'file': logfile})
 
 plt.style.use(hep.style.CMS)
-gs = gridspec.GridSpec(3, 1, height_ratios=[4, 1, 1])
+gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
 
 NEVENT_MAX = None
 #NEVENT_MAX = 1000000
 
 event_expressions = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
+    ('isWcb',  '''isWcb'''),
     ('weight', '''weight'''),
     ('nb',     '''nb_t_deep_ex''')  # Tight. Exclusive or inclusive?
 ]))
@@ -48,14 +49,13 @@ labels = {
     'Wcb':   r'W + Jets and Top ($W \to cb$)',
     'QCD':   r'QCD',
     'WJets': r'W + Jets ($W \to \mathrm{others}$)',
-    #'Top':   r'Top',
-    'TT':    r'TTbar',
-    'ST':    r'SingleTop',
+    'Top':   r'Top',
+    #'TT':    r'TTbar',
+    #'ST':    r'SingleTop',
     'Rest':  r'Others',
 }
-mcfiles = glob.glob('samples/2017/mc/*.root')
-datafiles = glob.glob('samples/2017/data/SlimmedTree_*.root')
-mcfile_pattern = re.compile(r'^.*Tree_(.*)\.root$')
+rootfiles = glob.glob('samples/2018/mc/*.root')
+rootfile_pattern = re.compile('^.*Tree_(.*)\.root$')
 
 # Compute expressions to be evaluated on input ROOT files.
 expressions = [expression[1] for expression in event_expressions]
@@ -85,46 +85,37 @@ def concatenate(files, expressions, n=None):
 # Categorized events.
 events = { 'Wcb': [] }
 
-for mcfile in mcfiles:
+for rootfile in rootfiles:
     # Extract category from pathname.
-    match = mcfile_pattern.search(mcfile)
+    match = rootfile_pattern.search(rootfile)
     if not match: continue
     category = match.group(1)
-    if category == 'Signal': category = 'Wcb'
+    if category == 'Wcb': raise RuntimeError('unexpected category: Wcb')
+    if category not in labels: continue
 
     # Split Wcb and non-Wcb events.
     print('Loading %s events...' % category)
-    current_events = concatenate([mcfile + ':PKUTree'], expressions, NEVENT_MAX)
-    print('%d events loaded from %s.' % (len(current_events), len(current_events)))
-    events[category] = current_events
+    current_events = concatenate([rootfile + ':PKUTree'], expressions, NEVENT_MAX)
+    wcb_events    = current_events[current_events['isWcb'] == True ]
+    nonwcb_events = current_events[current_events['isWcb'] == False]
+    print('%d events (%d Wcb) loaded from %s.' % (len(current_events), len(wcb_events), rootfile))
+    events['Wcb'].append(wcb_events)
+    events[category] = nonwcb_events
 
-# Load data.
-print('Loading data...')
-events['data'] = concatenate([datafile + ':PKUTree' for datafile in datafiles], expressions, NEVENT_MAX)
-print('Blinding data...')
-events['data'] = ak.concatenate([
-    events['data'][events['data']['a_sdmass'] <  50],
-    events['data'][events['data']['a_sdmass'] > 110],
-])
-
+# Merge Wcb events from different categories.
+events['Wcb'] = ak.concatenate(events['Wcb'])
 categories = list(events.keys())
 
 def figure(*args, **kwargs):
     fig = plt.figure(*args, **kwargs)
     fig.add_subplot(gs[0])
     try:
-        hep.cms.label(data=False, paper=False, supplementary=False, year=2017, lumi=41.48)
+        hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.7)
     except Exception:
-        hep.cms.label(data=False, label='Preliminary', year=2017, lumi=41.48)
+        hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.7)
     return fig
 
 def histplot(hists, cates):
-    data_hist = None
-    hs, cs = [], []
-    for hist, cate in zip(hists, cates):
-        if cate == 'data': data_hist = hist; continue
-        hs.append(hist); cs.append(cate)
-    hists, cates = hs, cs
     counts     = [hist[0] for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     bins       = [hist[1] for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     wcb_hists  = [hist    for (hist, cate) in zip(hists, cates) if cate == 'Wcb']
@@ -134,11 +125,8 @@ def histplot(hists, cates):
     items = sorted(zip(count_sums, cates, counts, bins))
     cates      = [item[1]            for item in items]
     hists      = [(item[2], item[3]) for item in items]
-    hep.histplot(hists,                stack=True,  histtype='fill',     label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
-    plt.errorbar(np.mean([bins[0][:-1], bins[0][1:]], axis=0), np.sum(counts, axis=0), yerr=np.sqrt(np.sum(counts, axis=0)), linestyle='', color='black')
-    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step',     label=[labels[cate] for cate in wcb_cates], color='black')
-    if not data_hist: return
-    hep.histplot(data_hist, yerr=True, stack=False, histtype='errorbar', label='data', color='black')
+    hep.histplot(hists,                stack=True,  histtype='fill', label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
+    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step', label=[labels[cate] for cate in wcb_cates], color='black')
 
 def savefig(path, *args, **kwargs):
     print('Saving to %s...' % path)
@@ -148,11 +136,6 @@ def get_signif(s, b):
     return np.sqrt(2 * ((s + b) * np.log(1 + s / (b + (s == 0))) - s))
 
 def signif(hists, cates):
-    hs, cs = [], []
-    for hist, cate in zip(hists, cates):
-        if cate == 'data': continue
-        hs.append(hist); cs.append(cate)
-    hists, cates = hs, cs
     wcb_hists  = [hist    for (hist, cate) in zip(hists, cates) if cate == 'Wcb']
     hists      = [hist    for (hist, cate) in zip(hists, cates) if cate != 'Wcb']
     bins = wcb_hists[0][1]
@@ -180,22 +163,6 @@ def signif(hists, cates):
     plt.legend()
     return signif_max
 
-def data_over_mc(hists, cates):
-    data_hist = None
-    hs, cs = [], []
-    for hist, cate in zip(hists, cates):
-        if cate == 'data': data_hist = hist; continue
-        hs.append(hist); cs.append(cate)
-    hists, cates = hs, cs
-    bins = data_hist[1]
-    d = data_hist[0]
-    m = np.sum([hist[0] for hist in hists], axis=0)
-    dom = d / (m + (d == 0))
-    err_dom = dom * np.hypot(1 / np.sqrt(d + (d == 0)), 1 / np.sqrt(m + (m == 0)))
-    x = np.mean([bins[:-1], bins[1:]], axis=0)
-    plt.ylim(-0.2, 1.8)
-    plt.errorbar(x, dom, yerr=err_dom, fmt='ko')
-
 print('B veto:')
 cut_events = { }
 for category in categories:
@@ -203,24 +170,10 @@ for category in categories:
     print('  - %s:\t%d' % (category, len(cut_events[category])))
 events = cut_events
 
-fig = figure(figsize=(12, 13.5), dpi=150)
-sdmass_bins = np.linspace(20, 220, 21)
-sdmass_hists = [np.histogram(events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=events[category]['weight'].to_numpy()) for category in categories]
-histplot(sdmass_hists, categories)
-plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
-plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
-s = signif(sdmass_hists, categories)
-plt.ylabel('Significance'); plt.grid()
-plt.gca().set_xticklabels([]); fig.add_subplot(gs[2])
-data_over_mc(sdmass_hists, categories)
-plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Data/MC'); plt.grid()
-plt.tight_layout(); savefig('all.pdf')
-plt.close()
-
 thresholds = [
     [0.990, 0.995, 0.998, 0.999],
+    [0.950, 0.980, 0.990, 0.995],
     [0.800, 0.900, 0.950, 0.980],
-    [0.000, 0.500, 0.800, 0.900],
 ]
 
 for iSR in range(len(thresholds)):
@@ -234,28 +187,15 @@ for iSR in range(len(thresholds)):
             cut_events[category] = events[category][events[category]['a_HbcVSQCS'] >= threshold]
             print('  - %s:\t%d' % (category, len(cut_events[category])))
 
-        fig = figure(figsize=(12, 13.5), dpi=150)
-        sdmass_bins = np.linspace(20, 220, 21)
-        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=cut_events[category]['weight'].to_numpy()) for category in categories]
+        fig = figure(figsize=(12, 11.25), dpi=150)
+        sdmass_bins = np.linspace(20, 220, 51)
+        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
         histplot(sdmass_hists, categories)
         plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
         s = signif(sdmass_hists, categories)
-        plt.ylabel('Significance'); plt.grid()
-        plt.gca().set_xticklabels([]); fig.add_subplot(gs[2])
-        data_over_mc(sdmass_hists, categories)
-        plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Data/MC'); plt.grid()
+        plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Significance'); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f.pdf' % (iSR + 1, threshold))
-        plt.close()
-
-        fig = plt.figure(figsize=(12, 9), dpi=150)
-        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2017, lumi=41.48)
-        except Exception: hep.cms.label(data=False, label='Preliminary', year=2017, lumi=41.48)
-        weight_bins = np.logspace(-3, 3, 61)
-        weight_hists = [np.histogram(cut_events[category]['weight'].to_numpy(), weight_bins) for category in categories]
-        histplot(weight_hists, categories)
-        plt.xlabel('Weight'); plt.ylabel('Unweighted events'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
-        plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
         plt.close()
 
         if s > s_best: s_best = s; threshold_best = threshold

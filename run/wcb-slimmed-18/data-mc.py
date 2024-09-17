@@ -48,13 +48,13 @@ labels = {
     'Wcb':   r'W + Jets and Top ($W \to cb$)',
     'QCD':   r'QCD',
     'WJets': r'W + Jets ($W \to \mathrm{others}$)',
-    #'Top':   r'Top',
-    'TT':    r'TTbar',
-    'ST':    r'SingleTop',
+    'Top':   r'Top',
+    #'TT':    r'TTbar',
+    #'ST':    r'SingleTop',
     'Rest':  r'Others',
 }
-mcfiles = glob.glob('samples/2017/mc/*.root')
-datafiles = glob.glob('samples/2017/data/SlimmedTree_*.root')
+mcfiles = glob.glob('samples/2018/mc/*.root')
+datafiles = glob.glob('samples/2018/data/SlimmedTree_*.root')
 mcfile_pattern = re.compile(r'^.*Tree_(.*)\.root$')
 
 # Compute expressions to be evaluated on input ROOT files.
@@ -113,9 +113,9 @@ def figure(*args, **kwargs):
     fig = plt.figure(*args, **kwargs)
     fig.add_subplot(gs[0])
     try:
-        hep.cms.label(data=False, paper=False, supplementary=False, year=2017, lumi=41.48)
+        hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
     except Exception:
-        hep.cms.label(data=False, label='Preliminary', year=2017, lumi=41.48)
+        hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
     return fig
 
 def histplot(hists, cates):
@@ -249,8 +249,8 @@ for iSR in range(len(thresholds)):
         plt.close()
 
         fig = plt.figure(figsize=(12, 9), dpi=150)
-        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2017, lumi=41.48)
-        except Exception: hep.cms.label(data=False, label='Preliminary', year=2017, lumi=41.48)
+        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
+        except Exception: hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
         weight_bins = np.logspace(-3, 3, 61)
         weight_hists = [np.histogram(cut_events[category]['weight'].to_numpy(), weight_bins) for category in categories]
         histplot(weight_hists, categories)
