@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 
 import re
 import uproot
@@ -55,7 +55,7 @@ labels = {
 }
 mcfiles = glob.glob('samples/2017/mc/*.root')
 datafiles = glob.glob('samples/2017/data/SlimmedTree_*.root')
-mcfile_pattern = re.compile('^.*Tree_(.*)\.root$')
+mcfile_pattern = re.compile(r'^.*Tree_(.*)\.root$')
 
 # Compute expressions to be evaluated on input ROOT files.
 expressions = [expression[1] for expression in event_expressions]
@@ -118,12 +118,6 @@ def figure(*args, **kwargs):
         hep.cms.label(data=False, label='Preliminary', year=2017, lumi=41.48)
     return fig
 
-def scale(hists, labs):
-    for i, (count, _) in enumerate(hists):
-        sf = 100  # [XXX]
-        count *= sf
-        labs[i] += r' ($\times' + str(sf) + r'$)'
-
 def histplot(hists, cates):
     data_hist = None
     hs, cs = [], []
@@ -142,9 +136,7 @@ def histplot(hists, cates):
     hists      = [(item[2], item[3]) for item in items]
     hep.histplot(hists,                stack=True,  histtype='fill',     label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
     plt.errorbar(np.mean([bins[0][:-1], bins[0][1:]], axis=0), np.sum(counts, axis=0), yerr=np.sqrt(np.sum(counts, axis=0)), linestyle='', color='black')
-    wcb_labels = [labels[cate] for cate in wcb_cates]
-    scale(wcb_hists, wcb_labels)
-    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step',     label=wcb_labels, color='black')
+    hep.histplot(wcb_hists, yerr=True, stack=False, histtype='step',     label=[labels[cate] for cate in wcb_cates], color='black')
     if not data_hist: return
     hep.histplot(data_hist, yerr=True, stack=False, histtype='errorbar', label='data', color='black')
 
@@ -184,7 +176,7 @@ def signif(hists, cates):
     plt.plot(bins, signif_u, label='upper')
     plt.plot([bins[l]] * 2, [0, signif_max * 1.2], 'k--')
     plt.plot([bins[u]] * 2, [0, signif_max * 1.2], 'k--')
-    plt.plot([], [], 'k--', label='optimal (%.3f)' % (signif_max / 100))
+    plt.plot([], [], 'k--', label='optimal (%.3f)' % signif_max)
     plt.legend()
     return signif_max
 
@@ -213,7 +205,7 @@ events = cut_events
 
 fig = figure(figsize=(12, 13.5), dpi=150)
 sdmass_bins = np.linspace(20, 220, 21)
-sdmass_hists = [np.histogram(events[category]['a_sdmass'], sdmass_bins, weights=events[category]['weight']) for category in categories]
+sdmass_hists = [np.histogram(events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=events[category]['weight'].to_numpy()) for category in categories]
 histplot(sdmass_hists, categories)
 plt.ylabel('Events'); plt.yscale('log'); plt.legend(); plt.grid()
 plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
@@ -244,7 +236,7 @@ for iSR in range(len(thresholds)):
 
         fig = figure(figsize=(12, 13.5), dpi=150)
         sdmass_bins = np.linspace(20, 220, 21)
-        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'], sdmass_bins, weights=cut_events[category]['weight']) for category in categories]
+        sdmass_hists = [np.histogram(cut_events[category]['a_sdmass'].to_numpy(), sdmass_bins, weights=cut_events[category]['weight'].to_numpy()) for category in categories]
         histplot(sdmass_hists, categories)
         plt.ylabel('Events'); plt.yscale('linear'); plt.legend(); plt.grid()
         plt.gca().set_xticklabels([]); fig.add_subplot(gs[1])
@@ -254,6 +246,16 @@ for iSR in range(len(thresholds)):
         data_over_mc(sdmass_hists, categories)
         plt.xlabel('Soft Dropped Mass [GeV]'); plt.ylabel('Data/MC'); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f.pdf' % (iSR + 1, threshold))
+        plt.close()
+
+        fig = plt.figure(figsize=(12, 9), dpi=150)
+        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
+        except Exception: hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
+        weight_bins = np.logspace(-3, 3, 61)
+        weight_hists = [np.histogram(cut_events[category]['weight'].to_numpy(), weight_bins) for category in categories]
+        histplot(weight_hists, categories)
+        plt.xlabel('Weight'); plt.ylabel('Unweighted events'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
+        plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
         plt.close()
 
         if s > s_best: s_best = s; threshold_best = threshold
