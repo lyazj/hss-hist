@@ -21,8 +21,9 @@ NEVENT_MAX = None
 #NEVENT_MAX = 1000000
 
 event_expressions = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
-    ('weight', '''weight'''),
-    ('nb',     '''nb_t_deep_ex''')  # Tight. Exclusive or inclusive?
+    ('weight',   '''weight'''),
+    ('puWeight', '''puWeight'''),
+    ('nb',       '''nb_t_deep_ex''')  # Tight. Exclusive or inclusive?
 ]))
 jet_expressions   = list(map(lambda x: (x[0], re.sub(r'\s+', ' ', x[1])), [
     #('%s_pT',          '''PTj_V2_%s'''),
@@ -72,7 +73,7 @@ def concatenate(files, expressions, n=None):
             events.append(file.arrays(expressions=expressions, entry_start=0, entry_stop=n))
         if n is not None: n -= len(events)
     events = ak.concatenate(events)
-    aliased_events = ak.Array({ alias: events[origin] for alias, origin in event_expressions })
+    aliased_events = ak.Array({ alias: events[origin] for alias, origin in event_expressions if origin in events.fields })
     for jet_label in jet_labels:
         for alias, origin in jet_expressions:
             aliased_events[alias.replace('%s', jet_label)] = events[origin.replace('%s', jet_label)]
@@ -100,7 +101,9 @@ for mcfile in mcfiles:
 
 # Load data.
 print('Loading data...')
-events['data'] = concatenate([datafile + ':PKUTree' for datafile in datafiles], expressions, NEVENT_MAX)
+data_expressions = expressions.copy()
+data_expressions.remove('puWeight')
+events['data'] = concatenate([datafile + ':PKUTree' for datafile in datafiles], data_expressions, NEVENT_MAX)
 print('Blinding data...')
 events['data'] = ak.concatenate([
     events['data'][events['data']['a_sdmass'] <  50],
@@ -256,6 +259,16 @@ for iSR in range(len(thresholds)):
         histplot(weight_hists, categories)
         plt.xlabel('Weight'); plt.ylabel('Unweighted events'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
         plt.tight_layout(); savefig('sr%d-%.3f_weight.pdf' % (iSR + 1, threshold))
+        plt.close()
+
+        fig = plt.figure(figsize=(12, 9), dpi=150)
+        try: hep.cms.label(data=False, paper=False, supplementary=False, year=2018, lumi=59.83)
+        except Exception: hep.cms.label(data=False, label='Preliminary', year=2018, lumi=59.83)
+        weight_bins = np.logspace(-3, 3, 61)
+        weight_hists = [np.histogram(cut_events[category]['puWeight'].to_numpy(), weight_bins) for category in categories if category != 'data']
+        histplot(weight_hists, categories)
+        plt.xlabel('PU Weight'); plt.ylabel('Unweighted events'); plt.xscale('log'); plt.yscale('log'); plt.legend(); plt.grid()
+        plt.tight_layout(); savefig('sr%d-%.3f_puweight.pdf' % (iSR + 1, threshold))
         plt.close()
 
         if s > s_best: s_best = s; threshold_best = threshold
