@@ -49,9 +49,9 @@ labels = {
     'Wcb':   r'W + Jets and Top ($W \to cb$)',
     'QCD':   r'QCD',
     'WJets': r'W + Jets ($W \to \mathrm{others}$)',
-    #'Top':   r'Top',
-    'TT':    r'TTbar',
-    'ST':    r'SingleTop',
+    'Top':   r'Top',
+    #'TT':    r'TTbar',
+    #'ST':    r'SingleTop',
     'Rest':  r'Others',
 }
 mcfiles = glob.glob('samples/2017/mc/*.root')
