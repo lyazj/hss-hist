@@ -133,8 +133,8 @@ def histplot(hists, cates):
     wcb_hists  = [hist    for (hist, cate) in zip(hists, cates) if cate == 'Wcb']
     wcb_cates  = ['Wcb']
     cates      = [cate for cate in cates if cate != 'Wcb']
-    count_sums = [np.sum(count) for count in counts]
-    items = sorted(zip(count_sums, cates, counts, bins))
+    cate_ids   = [{'QCD': 0, 'Top': -1, 'WJets': -2, 'Rest': -3}.get(cate, -99) for cate in cates]
+    items      = sorted(zip(cate_ids, cates, counts, bins))
     cates      = [item[1]            for item in items]
     hists      = [(item[2], item[3]) for item in items]
     hep.histplot(hists,                stack=True,  histtype='fill',     label=[labels[cate] for cate in cates    ], edgecolor='black', linewidth=0.5)
